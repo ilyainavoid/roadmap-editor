@@ -4,6 +4,7 @@ import ProtectedRoute from "../Providers/ProtectedRoute.tsx";
 import {routes} from "../Consts/routes.ts";
 import MainPage from "../Pages/MainPage/MainPage.tsx";
 import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
+import RegistrationPage from "../Pages/RegistrationPage/RegistrationPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
             {
                 path: routes.login(),
                 element: <LoginPage/>
+            },
+            {
+                path: routes.registration(),
+                element: <RegistrationPage/>
             }
         ]
     }
