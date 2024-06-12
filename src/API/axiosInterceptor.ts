@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance.ts";
 import axios from "axios";
-import {getRefreshToken, setTokens} from "../Helpers/authHelpers.ts";
+import {getAccessToken, getRefreshToken, setTokens} from "../Helpers/authHelpers.ts";
 
 let isRefreshing = false;
 let failedQueue: any[] = [];
@@ -48,7 +48,7 @@ axiosInstance.interceptors.response.use(
 
             return new Promise(function(resolve, reject) {
                 axios
-                    .post('api/user/refresh', { token: refreshToken })
+                    .post('api/user/refresh', {AccessToken:getAccessToken(),  RefreshToken: refreshToken })
                     .then(({ data }) => {
                         setTokens(data.access_token, data.refresh_token )
                         axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token;

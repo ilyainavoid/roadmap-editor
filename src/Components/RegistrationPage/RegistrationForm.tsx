@@ -4,8 +4,11 @@ import {validationRules} from "../../Consts/validationRules.ts";
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
 import PrimaryButton from "../Buttons/PrimaryButton.tsx";
 import {postRegistrationUser} from "../../API/User/postRegistrationUser.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {routes} from "../../Consts/routes.ts";
+import {useNotification} from "../../Providers/NotificationProvider.tsx";
+import {REGISTRATION_SUCCESS} from "../../Consts/strings.ts";
+
 const {Title} = Typography
 
 interface RegistrationValues {
@@ -16,14 +19,21 @@ interface RegistrationValues {
 
 const RegistrationForm: React.FC = () => {
     const [form] = Form.useForm();
-
+    const navigate = useNavigate()
+    const {notify} = useNotification();
 
 
     async function onFinish(values: RegistrationValues) {
         console.log(values);
-        let result = await postRegistrationUser({userCredentials: values})
-        if(result){
-            console.log(result)
+        let result = await postRegistrationUser({ userCredentials: values });
+        if (result && 'accessToken' in result && 'refreshToken' in result) {
+            console.log(result);
+            notify('success', REGISTRATION_SUCCESS);
+            navigate(routes.root());
+        } else {
+            if (result && 'error' in result) {
+                notify('error', result.error);
+            }
         }
     }
 

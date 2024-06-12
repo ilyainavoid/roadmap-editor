@@ -6,6 +6,8 @@ import PrimaryButton from "../Buttons/PrimaryButton.tsx";
 import {postLoginUser} from "../../API/User/postLoginUser.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {routes} from "../../Consts/routes.ts";
+import {useNotification} from "../../Providers/NotificationProvider.tsx";
+import {LOGIN_FAIL, LOGIN_SUCCESS} from "../../Consts/strings.ts";
 
 const {Title} = Typography
 
@@ -18,17 +20,18 @@ interface LoginValues{
 const LoginForm: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate()
-
+    const {notify} = useNotification();
 
     async function onFinish(values: LoginValues) {
         console.log(values);
         let result = await postLoginUser({userCredentials: values})
         if(result){
             console.log(result)
+            notify("success", LOGIN_SUCCESS)
             navigate(routes.root());
         }
         else {
-
+            notify("error", LOGIN_FAIL)
         }
     }
 
