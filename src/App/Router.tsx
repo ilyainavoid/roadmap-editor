@@ -5,6 +5,7 @@ import {routes} from "../Consts/routes.ts";
 import MainPage from "../Pages/MainPage/MainPage.tsx";
 import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 import RegistrationPage from "../Pages/RegistrationPage/RegistrationPage.tsx";
+import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -17,7 +18,12 @@ export const router = createBrowserRouter([
                         <Outlet/>
                     </ProtectedRoute>
                 ),
-                children: [],
+                children: [
+                    {
+                        path: routes.profile(),
+                        element: <ProfilePage/>
+                    }
+                ],
 
             },
             {

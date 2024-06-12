@@ -13,3 +13,9 @@ interface TokenResponse {
     accessToken: string;
     refreshToken: string;
 }
+
+interface UserProfile{
+    id: string;
+    email: string;
+    username: string;
+}
