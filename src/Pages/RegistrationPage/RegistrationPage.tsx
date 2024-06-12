@@ -1,6 +1,6 @@
 import {Flex} from "antd";
 import React from "react";
-import RegistrationForm from "../../Components/RegistrationPage/RegistrationPage.tsx";
+import RegistrationForm from "../../Components/RegistrationPage/RegistrationForm.tsx";
 
 const RegistrationPage: React.FC = () => {
     return (
