@@ -1,8 +1,7 @@
-import {Card, Flex, Form, Input, Typography} from "antd";
+import {Button, Card, Flex, Form, Input, Typography} from "antd";
 import React from "react";
 import {validationRules} from "../../Consts/validationRules.ts";
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
-import PrimaryButton from "../Buttons/PrimaryButton.tsx";
 import {postRegistrationUser} from "../../API/User/postRegistrationUser.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {routes} from "../../Consts/routes.ts";
@@ -53,7 +52,7 @@ const RegistrationForm: React.FC = () => {
                         <Input.Password prefix={<LockOutlined/>} placeholder={"Введите пароль"}/>
                     </Form.Item>
                     <Flex className={"btn-container"}>
-                        <PrimaryButton text={"Зарегистрироваться"}/>
+                        <Button type={'primary'} htmlType={'submit'}>Войти</Button>
                     </Flex>
                     <Flex className={"text-container"}>
                         <p>Уже есть аккаунт? <Link to={routes.login()}>Вход</Link></p>

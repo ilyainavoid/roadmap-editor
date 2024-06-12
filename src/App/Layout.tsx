@@ -4,16 +4,19 @@ import {Outlet} from "react-router-dom";
 import HeaderSection from "../Components/Header/HeaderSection.tsx";
 import React from "react";
 import {NotificationProvider} from "../Providers/NotificationProvider.tsx";
+import MainConfigProvider from "../Providers/MainConfigProvider.tsx";
 
 const Layout: React.FC = () => {
 
     return (
         <>
             <Provider store={store}>
-                <NotificationProvider>
-                    <HeaderSection/>
-                    <Outlet/>
-                </NotificationProvider>
+                <MainConfigProvider>
+                    <NotificationProvider>
+                        <HeaderSection/>
+                        <Outlet/>
+                    </NotificationProvider>
+                </MainConfigProvider>
             </Provider>
         </>
     )
