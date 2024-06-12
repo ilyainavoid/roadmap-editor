@@ -1,8 +1,9 @@
 import React from "react";
-import {Layout, Menu} from 'antd';
+import {ConfigProvider, Layout, Menu} from 'antd';
 import {generateMenuItems} from "../../Helpers/generateMenuItems.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {menuRoutes} from "../../Consts/menuRoutes.ts";
+import styles from "../Header/header.module.css"
 
 const {Header} = Layout;
 
@@ -27,15 +28,34 @@ const HeaderLayout: React.FC = () => {
 
     return (
         <>
-            <Header >
-                <Menu
-                    theme="dark"
-                    mode="horizontal"
-                    items={menuItems}
-                    selectedKeys={[currentKey]}
-                    onClick={handleMenuClick}
-                />
-            </Header>
+            <ConfigProvider
+                theme={{
+                    components: {
+                        Layout: {
+                            headerBg: 'rgb(237,244,242)',
+
+                        },
+                        Menu: {
+                            darkItemSelectedBg: '#4f7e5c',
+                            darkItemBg: 'rgb(237,244,242)',
+                            darkItemColor: 'rgb(124,131,99)',
+                            darkItemHoverColor: 'rgb(180,191,143)',
+                        }
+                    }
+
+                }}>
+
+                <Header className={styles.antLayoutHeader}>
+                    <Menu
+                        theme="dark"
+                        mode="horizontal"
+                        items={menuItems}
+                        selectedKeys={[currentKey]}
+                        onClick={handleMenuClick}
+                    />
+                </Header>
+
+            </ConfigProvider>
         </>
     );
 };

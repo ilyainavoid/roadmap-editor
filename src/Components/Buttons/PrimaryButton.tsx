@@ -12,6 +12,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({ text }) => {
                 theme={{
                     token: {
                         colorPrimary: '#00b96b',
+
                     },
                 }}
             >
