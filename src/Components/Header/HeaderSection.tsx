@@ -4,14 +4,18 @@ import {generateMenuItems} from "../../Helpers/generateMenuItems.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {menuRoutes} from "../../Consts/menuRoutes.ts";
 import styles from "../Header/header.module.css"
+import {useSelector} from "react-redux";
+import {RootState} from "../../Redux/rootReducer.ts";
 
 const {Header} = Layout;
 
 const HeaderLayout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
-    const menuItems = generateMenuItems()
+
+    const menuItems = generateMenuItems(isAuth)
 
     const pathToKey: { [path: string]: string } = Object.keys(menuRoutes).reduce((acc, key) => {
         const path = menuRoutes[key];

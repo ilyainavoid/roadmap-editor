@@ -8,4 +8,5 @@ export const menuRoutes: MenuRoutes = {
     main: routes.root(),
     login: routes.login(),
     registration: routes.registration(),
+    profile: routes.profile(),
 };
