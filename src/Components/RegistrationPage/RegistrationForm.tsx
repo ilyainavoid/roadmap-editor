@@ -3,7 +3,9 @@ import React from "react";
 import {validationRules} from "../../Consts/validationRules.ts";
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
 import PrimaryButton from "../Buttons/PrimaryButton.tsx";
-import {postRegistrationUser} from "../../API/postRegistrationUser.ts";
+import {postRegistrationUser} from "../../API/User/postRegistrationUser.ts";
+import {Link} from "react-router-dom";
+import {routes} from "../../Consts/routes.ts";
 const {Title} = Typography
 
 interface RegistrationValues {
@@ -45,7 +47,7 @@ const RegistrationForm: React.FC = () => {
                         <PrimaryButton text={"Зарегистрироваться"}/>
                     </Flex>
                     <Flex className={"text-container"}>
-                        <p>Уже есть аккаунт? <a>Вход</a></p>
+                        <p>Уже есть аккаунт? <Link to={routes.login()}>Вход</Link></p>
                     </Flex>
                 </Form>
             </Card>

@@ -3,7 +3,9 @@ import {Card, Flex, Form, Input, Typography} from "antd";
 import {validationRules} from "../../Consts/validationRules.ts";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import PrimaryButton from "../Buttons/PrimaryButton.tsx";
-import {postLoginUser} from "../../API/postLoginUser.ts";
+import {postLoginUser} from "../../API/User/postLoginUser.ts";
+import {Link, useNavigate} from "react-router-dom";
+import {routes} from "../../Consts/routes.ts";
 
 const {Title} = Typography
 
@@ -15,7 +17,7 @@ interface LoginValues{
 
 const LoginForm: React.FC = () => {
     const [form] = Form.useForm();
-
+    const navigate = useNavigate()
 
 
     async function onFinish(values: LoginValues) {
@@ -23,6 +25,7 @@ const LoginForm: React.FC = () => {
         let result = await postLoginUser({userCredentials: values})
         if(result){
             console.log(result)
+            navigate(routes.root());
         }
         else {
 
@@ -46,7 +49,7 @@ const LoginForm: React.FC = () => {
                         <PrimaryButton text={"Войти"}/>
                     </Flex>
                     <Flex className={"text-container"}>
-                        <p>Еще нет аккаунта? <a>Регистрация</a></p>
+                        <p>Еще нет аккаунта? <Link to={routes.registration()}>Регистрация</Link></p>
                     </Flex>
                 </Form>
             </Card>
