@@ -8,29 +8,28 @@ import {Link, useNavigate} from "react-router-dom";
 import {routes} from "../../Consts/routes.ts";
 import {useNotification} from "../../Providers/NotificationProvider.tsx";
 import {LOGIN_FAIL, LOGIN_SUCCESS} from "../../Consts/strings.ts";
+import {useDispatch} from "react-redux";
+import {setAuth} from "../../Redux/actions/authAction.ts";
+import {AppDispatch} from "../../Redux/store.ts";
 
 const {Title} = Typography
-
-interface LoginValues{
-    username: string,
-    password: string
-}
 
 
 const LoginForm: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate()
     const {notify} = useNotification();
+    const dispatch: AppDispatch = useDispatch();
 
     async function onFinish(values: LoginValues) {
         console.log(values);
         let result = await postLoginUser({userCredentials: values})
-        if(result){
+        if (result) {
             console.log(result)
             notify("success", LOGIN_SUCCESS)
+            dispatch(setAuth(true));
             navigate(routes.root());
-        }
-        else {
+        } else {
             notify("error", LOGIN_FAIL)
         }
     }
@@ -38,7 +37,8 @@ const LoginForm: React.FC = () => {
     return (
         <>
             <Card className={"form-card"}>
-                <Form form={form} layout="vertical" name={"loginForm"} onFinish={onFinish} initialValues={{remember: true}}>
+                <Form form={form} layout="vertical" name={"loginForm"} onFinish={onFinish}
+                      initialValues={{remember: true}}>
                     <Flex className={"title-container"}>
                         <Title>Вход</Title>
                     </Flex>

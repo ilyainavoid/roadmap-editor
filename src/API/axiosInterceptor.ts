@@ -1,6 +1,8 @@
 import axiosInstance from "./axiosInstance.ts";
 import axios from "axios";
 import {getAccessToken, getRefreshToken, setTokens} from "../Helpers/authHelpers.ts";
+import store from "../Redux/store.ts";
+import {setAuth} from "../Redux/actions/authAction.ts";
 
 let isRefreshing = false;
 let failedQueue: any[] = [];
@@ -25,6 +27,9 @@ axiosInstance.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response.status === 401 && !originalRequest._retry) {
+
+            store.dispatch(setAuth(false))
+
             if (isRefreshing) {
                 return new Promise(function(resolve, reject) {
                     failedQueue.push({ resolve, reject });
@@ -55,6 +60,7 @@ axiosInstance.interceptors.response.use(
                         originalRequest.headers['Authorization'] = 'Bearer ' + data.access_token;
                         processQueue(null, data.access_token);
                         resolve(axiosInstance(originalRequest));
+                        store.dispatch(setAuth(true))
                     })
                     .catch(err => {
                         processQueue(err, null);

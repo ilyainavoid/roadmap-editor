@@ -3,22 +3,12 @@ import {setTokens} from "../../Helpers/authHelpers.ts";
 import axiosInstance from "../axiosInstance.ts";
 import {REGISTRATION_EMAIL_FAIL, REGISTRATION_USERNAME_FAIL} from "../../Consts/strings.ts";
 
-interface UserCredentials {
-    username: string;
-    password: string;
-}
-
-interface ResponseData {
-    accessToken: string;
-    refreshToken: string;
-}
-
 
 export const postRegistrationUser = async ({userCredentials}: {
-    userCredentials: UserCredentials
-}): Promise<ResponseData | { error: string } | undefined> => {
+    userCredentials: RegistrationValues
+}): Promise<TokenResponse | { error: string } | undefined> => {
     try {
-        const response = await axios.post<ResponseData>('/api/user/register', userCredentials);
+        const response = await axios.post<TokenResponse>('/api/user/register', userCredentials);
         console.log(response.data);
         setTokens(response.data.accessToken, response.data.refreshToken);
         axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.accessToken;

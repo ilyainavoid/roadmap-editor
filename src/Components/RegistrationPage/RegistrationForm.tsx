@@ -8,20 +8,18 @@ import {Link, useNavigate} from "react-router-dom";
 import {routes} from "../../Consts/routes.ts";
 import {useNotification} from "../../Providers/NotificationProvider.tsx";
 import {REGISTRATION_SUCCESS} from "../../Consts/strings.ts";
+import {AppDispatch} from "../../Redux/store.ts";
+import {useDispatch} from "react-redux";
+import {setAuth} from "../../Redux/actions/authAction.ts";
 
 const {Title} = Typography
 
-interface RegistrationValues {
-    email: string;
-    username: string;
-    password: string;
-}
 
 const RegistrationForm: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate()
     const {notify} = useNotification();
-
+    const dispatch: AppDispatch = useDispatch();
 
     async function onFinish(values: RegistrationValues) {
         console.log(values);
@@ -29,6 +27,7 @@ const RegistrationForm: React.FC = () => {
         if (result && 'accessToken' in result && 'refreshToken' in result) {
             console.log(result);
             notify('success', REGISTRATION_SUCCESS);
+            dispatch(setAuth(true));
             navigate(routes.root());
         } else {
             if (result && 'error' in result) {
