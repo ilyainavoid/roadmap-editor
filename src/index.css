@@ -32,10 +32,3 @@
     align-items: center;
 }
 
-.ant-btn-primary{
-    background-color: rgba(46, 157, 56, 0.98);
-}
-
-.ant-btn-primary:hover{
-    background-color: rgba(66, 213, 80, 0.98);
-}
