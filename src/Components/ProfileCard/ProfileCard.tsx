@@ -4,9 +4,9 @@ import {UserOutlined} from "@ant-design/icons";
 import styles from "../ProfileCard/profile.module.css"
 import {getUserProfile} from "../../API/User/getUserProfile.ts";
 
-const {Title, Text} =  Typography;
+const {Title, Text} = Typography;
 
-const ProfileCard: React.FC = () =>{
+const ProfileCard: React.FC = () => {
 
     const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
 
@@ -20,26 +20,26 @@ const ProfileCard: React.FC = () =>{
     }, []);
 
     if (!userInfo) {
-        return  <Spin size="large" />;
+        return <Spin size="large"/>;
     }
 
-    return(
+    return (
         <>
-            <Card className={styles.card} >
+            <Card className={styles.card}>
                 <Row align="middle" wrap>
-                    <Col style={{ position: 'relative', width: 'fit-content', marginRight: '50px' }}>
-                        <Avatar size={180} className={styles.avatar} icon={<UserOutlined />} />
+                    <Col style={{position: 'relative', width: 'fit-content', marginRight: '50px'}}>
+                        <Avatar size={180} className={styles.avatar} icon={<UserOutlined/>}/>
                     </Col>
-                    <Col style={{ width: '50%' }}>
-                        <Space wrap >
+                    <Col style={{width: '50%'}}>
+                        <Space wrap>
                             <Space direction={"vertical"} wrap>
                                 <Space direction={'vertical'}>
-                                    <Title level={4}>ФИО:</Title>
-                                    <Text>{userInfo.username ?? "username"}</Text>
+                                    <Title level={4}>Username:</Title>
+                                    <Text style={{fontSize: 20}}>{userInfo.username}</Text>
                                 </Space>
                                 <Space direction={"vertical"}>
                                     <Title level={4}>Email:</Title>
-                                    <Text>{userInfo.email ?? "email"}</Text>
+                                    <Text style={{fontSize: 20}}>{userInfo.email}</Text>
                                 </Space>
                             </Space>
                         </Space>
