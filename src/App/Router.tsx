@@ -1,11 +1,11 @@
 import {createBrowserRouter, Outlet} from "react-router-dom";
-import Layout from "./Layout.tsx";
 import ProtectedRoute from "../Providers/ProtectedRoute.tsx";
 import {routes} from "../Consts/routes.ts";
 import MainPage from "../Pages/MainPage/MainPage.tsx";
 import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 import RegistrationPage from "../Pages/RegistrationPage/RegistrationPage.tsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
+import Layout from "./Layout.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: routes.root(),
-                element : <MainPage/>
+                element: <MainPage/>
             },
             {
                 path: routes.login(),

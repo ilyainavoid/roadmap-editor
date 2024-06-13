@@ -15,7 +15,7 @@ const HeaderLayout: React.FC = () => {
     const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
 
-    const menuItems = generateMenuItems(isAuth)
+    const menuItems = generateMenuItems(isAuth, navigate)
 
     const pathToKey: { [path: string]: string } = Object.keys(menuRoutes).reduce((acc, key) => {
         const path = menuRoutes[key];
