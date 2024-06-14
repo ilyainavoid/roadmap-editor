@@ -30,9 +30,8 @@ export const generateMenuItems = (isAuth: boolean, navigate: any): MenuItem[] =>
 const handleLogout = async (navigate: any) => {
     try {
         let response = await postLogoutUser();
-        if (response && response.status === 200) { // Ensure response is defined
+        if (response && response.status === 200) {
             setTimeout(() => {
-                localStorage.clear();
                 navigate(routes.login());
             }, 500);
         }
