@@ -6,6 +6,7 @@ import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 import RegistrationPage from "../Pages/RegistrationPage/RegistrationPage.tsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 import Layout from "./Layout.tsx";
+import CreateDiagramPage from "../Pages/CreateDiagramPage/CreateDiagramPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -24,7 +25,6 @@ export const router = createBrowserRouter([
                         element: <ProfilePage/>
                     }
                 ],
-
             },
             {
                 path: routes.root(),
@@ -37,6 +37,10 @@ export const router = createBrowserRouter([
             {
                 path: routes.registration(),
                 element: <RegistrationPage/>
+            },
+            {
+                path: routes.creatediagram(),
+                element: <CreateDiagramPage/>
             }
         ]
     }
