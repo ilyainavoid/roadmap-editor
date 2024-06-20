@@ -5,6 +5,7 @@ import {routes} from "../Consts/routes.ts";
 import MainPage from "../Pages/MainPage/MainPage.tsx";
 import LoginPage from "../Pages/LoginPage/LoginPage.tsx";
 import RegistrationPage from "../Pages/RegistrationPage/RegistrationPage.tsx";
+import CreateDiagramPage from "../Pages/CreateDiagramPage/CreateDiagramPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -17,7 +18,8 @@ export const router = createBrowserRouter([
                         <Outlet/>
                     </ProtectedRoute>
                 ),
-                children: [],
+                children: [
+                ],
 
             },
             {
@@ -31,6 +33,10 @@ export const router = createBrowserRouter([
             {
                 path: routes.registration(),
                 element: <RegistrationPage/>
+            },
+            {
+                path: routes.creatediagram(),
+                element: <CreateDiagramPage/>
             }
         ]
     }
