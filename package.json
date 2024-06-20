@@ -19,7 +19,6 @@
     "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-plugin-stencil": "^2.1.5",
     "@antv/x6-plugin-transform": "^2.1.8",
-    "@reduxjs/toolkit": "^2.2.5",
     "antd": "^5.18.0",
     "axios": "^1.7.2",
     "lodash.debounce": "^4.0.8",
