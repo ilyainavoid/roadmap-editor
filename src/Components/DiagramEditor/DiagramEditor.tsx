@@ -9,6 +9,7 @@ import { Selection } from '@antv/x6-plugin-selection'
 import { History } from '@antv/x6-plugin-history'
 import 'react-quill/dist/quill.snow.css'
 import './diagram.less'
+import { Keyboard } from '@antv/x6-plugin-keyboard'
 
 const themeAttrs = {
     body: {
@@ -116,6 +117,27 @@ const DiagramEditor: React.FC = () => {
             showNodeSelectionBox: true,
         }))
         graph.use(new History({ enabled: true }))
+        graph.use(new Keyboard({
+            enabled: true,
+            global: true,
+        }))
+
+        graph.bindKey('ctrl+c', () => {
+            const cells = graph.getSelectedCells();
+            if (cells.length) {
+                graph.copy(cells)
+            }
+            return false;
+        })
+
+        graph.bindKey('ctrl+v', () => {
+            if (!graph.isClipboardEmpty()) {
+                const cells = graph.paste({ offset: 32 });
+                graph.cleanSelection();
+                graph.select(cells);
+            }
+            return false;
+        })
 
         graph.centerContent()
         graphRef.current = graph
@@ -153,6 +175,7 @@ const DiagramEditor: React.FC = () => {
             label: 'Тема',
             attrs: themeAttrs,
             ports: { ...ports },
+            tools: ['button-remove']
         })
 
         const topic = graph.createNode({
@@ -163,6 +186,7 @@ const DiagramEditor: React.FC = () => {
             height: 40,
             label: 'Подтема',
             attrs: topicAttrs,
+            tools: ['button-remove']
         })
 
         stencil.load([theme], 'Theme')
@@ -177,6 +201,13 @@ const DiagramEditor: React.FC = () => {
 
         graph.on('history:change', () => {
             console.log('History changed')
+        })
+
+        graph.on('node:removed', ({ node }) => {
+            const edges = graph.getConnectedEdges(node)
+            edges.forEach(edge => {
+                edge.remove()
+            })
         })
 
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -203,4 +234,4 @@ const DiagramEditor: React.FC = () => {
     )
 }
 
-export default DiagramEditor
+export default DiagramEditor;
