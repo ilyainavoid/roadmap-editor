@@ -24,3 +24,8 @@ interface EditProfile {
     email: string;
     username: string;
 }
+
+interface PasswordChanges {
+    oldPassword: string;
+    newPassword: string;
+}

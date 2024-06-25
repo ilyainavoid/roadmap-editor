@@ -5,7 +5,14 @@ import styles from "../ProfileCard/profile.module.css";
 import {getUserProfile} from "../../API/User/getUserProfile";
 import {putEditProfile} from "../../API/User/putEditProfile.ts";
 import {useNotification} from "../../Providers/NotificationProvider.tsx";
-import {EDIT_PROFILE_FAIL, EDIT_PROFILE_SUCCESS} from "../../Consts/strings.ts";
+import {
+    CHANGE_PASSWORD_FAIL,
+    CHANGE_PASSWORD_SUCCESS,
+    EDIT_PROFILE_FAIL,
+    EDIT_PROFILE_SUCCESS
+} from "../../Consts/strings.ts";
+import EditPasswordModal from "../Modals/EditPasswordModal.tsx";
+import {putChangePassword} from "../../API/User/putChangePassword.ts";
 
 const {Title, Text} = Typography;
 
@@ -13,6 +20,7 @@ const ProfileCard: React.FC = () => {
     const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [form] = Form.useForm();
+    const [isEditingPassword, setIsEditingPassword] = useState(false);
     const {notify} = useNotification();
 
     const fetchData = async () => {
@@ -29,6 +37,14 @@ const ProfileCard: React.FC = () => {
         setIsEditing(true);
     };
 
+    const handleEditPasswordClick = () => {
+        setIsEditingPassword(true);
+    };
+
+    const handleCancelPasswordEdit = () => {
+        setIsEditingPassword(false);
+    };
+
     const handleCancelClick = () => {
         setIsEditing(false);
         form.resetFields();
@@ -36,7 +52,7 @@ const ProfileCard: React.FC = () => {
 
     const handleFormSubmit = async (values: EditProfile) => {
         try {
-            const response = await putEditProfile({ values });
+            const response = await putEditProfile({values});
 
             if (response && response.status === 200) {
                 setUserInfo((prevUserInfo) => ({
@@ -51,10 +67,26 @@ const ProfileCard: React.FC = () => {
             }
         } catch (error) {
             console.error("Failed to update profile:", error);
-            notify("error", EDIT_PROFILE_FAIL); // Notify user of the failure
+            notify("error", EDIT_PROFILE_FAIL);
         }
     };
 
+
+    const handlePasswordSubmit = async (values: PasswordChanges) => {
+        try {
+            const response = await putChangePassword({values});
+
+            if (response && response.status === 200) {
+                setIsEditingPassword(false);
+                notify("success", CHANGE_PASSWORD_SUCCESS);
+            } else {
+                notify("error", CHANGE_PASSWORD_FAIL);
+            }
+        } catch (error) {
+            console.error("Failed to update profile:", error);
+            notify("error", CHANGE_PASSWORD_FAIL);
+        }
+    };
 
     if (!userInfo) {
         return <Spin size="large"/>;
@@ -113,7 +145,7 @@ const ProfileCard: React.FC = () => {
                                 <Button type="primary" onClick={handleEditClick}>
                                     Редактировать
                                 </Button>
-                                <Button>
+                                <Button onClick={handleEditPasswordClick}>
                                     Сменить пароль
                                 </Button>
                             </Space>
@@ -121,6 +153,11 @@ const ProfileCard: React.FC = () => {
                     )}
                 </Col>
             </Row>
+            <EditPasswordModal
+                isOpen={isEditingPassword}
+                onCancel={handleCancelPasswordEdit}
+                onSubmit={handlePasswordSubmit}
+            />
         </Card>
     );
 };
