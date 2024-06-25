@@ -3,6 +3,6 @@ export const routes = {
     login: () => '/login',
     registration: () => '/registration',
     profile: () => '/profile',
-    creatediagram: () => '/create',
+    roadmap: (mode: string) => `/roadmap/${mode}`,
     edit: () => '/edit'
 }

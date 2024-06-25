@@ -9,9 +9,8 @@ import { Selection } from '@antv/x6-plugin-selection'
 import { History } from '@antv/x6-plugin-history'
 import { Keyboard } from '@antv/x6-plugin-keyboard'
 import 'react-quill/dist/quill.snow.css'
-import { Button, Flex, Select, Typography, Modal, Input } from 'antd'
+import { Typography, Modal, Input } from 'antd'
 import ReactQuill from 'react-quill'
-import { CopyOutlined, RollbackOutlined } from '@ant-design/icons'
 import './diagram.less'
 import { createThemeNode, createTopicNode } from '../../Consts/nodes.ts'
 import Toolbar from '../../Consts/toolbar.ts'
@@ -75,6 +74,11 @@ const DiagramEditor: React.FC = () => {
             connecting: {
                 allowNode: true,
             },
+            panning: {
+                enabled: true,
+                eventTypes: ['rightMouseDown'],
+            },
+            mousewheel: true,
         })
 
         graph.use(new Snapline({ enabled: true, sharp: true }))
@@ -219,24 +223,6 @@ const DiagramEditor: React.FC = () => {
 
     return (
         <div>
-            <Flex style={{ padding: '20px' }} justify="space-between">
-                <Flex align="center">
-                    <Button icon={<RollbackOutlined />}>На главную</Button>
-                    <Typography.Title editable level={1} style={{ marginLeft: '100px', marginBottom: '5px' }}>
-                        Some diagram name
-                    </Typography.Title>
-                </Flex>
-                <Flex align="center">
-                    <Button icon={<CopyOutlined />}>Клонировать диаграмму</Button>
-                    <Select
-                        options={[
-                            { value: 'edit', label: 'Редактирование' },
-                            { value: 'view', label: 'Просмотр' },
-                        ]}
-                        style={{ width: '150px', marginLeft: '25px' }}
-                    />
-                </Flex>
-            </Flex>
             <div className="stencil-app">
                 <div className="app-stencil" ref={stencilContainerRef} />
                 <div className="app-content" ref={containerRef} />
