@@ -3,4 +3,6 @@ export const routes = {
     login: () => '/login',
     registration: () => '/registration',
     profile: () => '/profile',
+    creatediagram: () => '/create',
+    edit: () => '/edit'
 }
