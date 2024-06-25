@@ -1,21 +1,19 @@
 import React from "react";
-import {postLogoutUser} from "../API/User/postLogoutUser.ts";
-import {routes} from "../Consts/routes.ts";
 
 interface MenuItem {
     key: string;
     label: string;
     style?: React.CSSProperties;
-    onClick?: () => void;
+    isDropdown?: boolean
 }
 
-export const generateMenuItems = (isAuth: boolean, navigate: any): MenuItem[] => {
+export const generateMenuItems = (isAuth: boolean): MenuItem[] => {
     let menuItems: MenuItem[] = [{ key: 'main', label: 'Главная' }];
 
     if (isAuth) {
         menuItems.push(
-            { key: 'profile', label: 'Профиль', style: { marginLeft: 'auto' } },
-            { key: 'logout', label: 'Выйти', onClick: async () => await handleLogout(navigate) }
+
+            { key: 'profile', label: 'Профиль', style: { marginLeft: 'auto' }, isDropdown: true }
         );
     } else {
         menuItems.push(
@@ -25,17 +23,4 @@ export const generateMenuItems = (isAuth: boolean, navigate: any): MenuItem[] =>
     }
 
     return menuItems;
-};
-
-const handleLogout = async (navigate: any) => {
-    try {
-        let response = await postLogoutUser();
-        if (response && response.status === 200) {
-            setTimeout(() => {
-                navigate(routes.login());
-            }, 500);
-        }
-    } catch (error) {
-        console.error("Logout failed", error);
-    }
 };

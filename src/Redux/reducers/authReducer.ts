@@ -1,7 +1,7 @@
 import {AuthAction, AuthActionType, AuthState} from "../types/authType.ts";
 
 const initialState: AuthState = {
-    isAuth: true,
+    isAuth: false,
 };
 
 const authReducer = (state = initialState, action: AuthAction): AuthState => {

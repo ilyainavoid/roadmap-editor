@@ -7,5 +7,11 @@ export const REGISTRATION_SUCCESS = 'Вы успешно зарегестрир�
 export const REGISTRATION_USERNAME_FAIL = 'Пользователь с этим именем уже существует';
 export const REGISTRATION_EMAIL_FAIL = 'Пользователь с этим email уже существует';
 
-export const LOGIN_SUCCESS = 'Вы усрешно вошли в систему';
+export const LOGIN_SUCCESS = 'Вы успешно вошли в систему';
 export const LOGIN_FAIL = 'Неверный логин или пароль';
+
+export const EDIT_PROFILE_SUCCESS = "Данные успешно изменены";
+export const EDIT_PROFILE_FAIL = "Не удалось изменить данные";
+
+export const CHANGE_PASSWORD_SUCCESS = "Вы успешно изменили пароль";
+export const CHANGE_PASSWORD_FAIL = "Не удалось поменять пароль";
