@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Graph } from '@antv/x6'
 import { Snapline } from '@antv/x6-plugin-snapline'
 import { Stencil } from '@antv/x6-plugin-stencil'
@@ -7,87 +7,59 @@ import { Transform } from '@antv/x6-plugin-transform'
 import { Dnd } from '@antv/x6-plugin-dnd'
 import { Selection } from '@antv/x6-plugin-selection'
 import { History } from '@antv/x6-plugin-history'
-import 'react-quill/dist/quill.snow.css'
-import './diagram.less'
 import { Keyboard } from '@antv/x6-plugin-keyboard'
-
-const themeAttrs = {
-    body: {
-        fill: '#00ff2c',
-        stroke: '#8f8f8f',
-        strokeWidth: 1,
-    },
-}
-
-const topicAttrs = {
-    body: {
-        fill: '#ffeb00',
-        stroke: '#8f8f8f',
-        strokeWidth: 1,
-        rx: 6,
-        ry: 6,
-    },
-}
-
-const ports = {
-    groups: {
-        top: {
-            position: 'top',
-            attrs: {
-                circle: {
-                    r: 6,
-                    magnet: true,
-                    stroke: '#31d0c6',
-                    strokeWidth: 2,
-                },
-            },
-        },
-        bottom: {
-            position: 'bottom',
-            attrs: {
-                circle: {
-                    r: 6,
-                    magnet: true,
-                    stroke: '#31d0c6',
-                    strokeWidth: 2,
-                },
-            },
-        },
-        left: {
-            position: 'left',
-            attrs: {
-                circle: {
-                    r: 6,
-                    magnet: true,
-                    stroke: '#31d0c6',
-                    strokeWidth: 2,
-                },
-            },
-        },
-        right: {
-            position: 'right',
-            attrs: {
-                circle: {
-                    r: 6,
-                    magnet: true,
-                    stroke: '#31d0c6',
-                    strokeWidth: 2,
-                },
-            },
-        },
-    },
-    items: [
-        { id: 'port_left', group: 'left' },
-        { id: 'port_right', group: 'right' },
-        { id: 'port_bottom', group: 'bottom' },
-        { id: 'port_top', group: 'top' },
-    ],
-}
+import 'react-quill/dist/quill.snow.css'
+import { Button, Flex, Select, Typography, Modal, Input } from 'antd'
+import ReactQuill from 'react-quill'
+import { CopyOutlined, RollbackOutlined } from '@ant-design/icons'
+import './diagram.less'
+import { createThemeNode, createTopicNode } from '../../Consts/nodes.ts'
+import Toolbar from '../../Consts/toolbar.ts'
 
 const DiagramEditor: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null)
     const stencilContainerRef = useRef<HTMLDivElement>(null)
     const graphRef = useRef<Graph | null>(null)
+
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [nodeData, setNodeData] = useState<{ id: string; label: string; data: string }>({
+        id: '',
+        label: '',
+        data: '',
+    })
+    const [dataPreview, setDataPreview] = useState('')
+
+    const showModal = (node: any) => {
+        const nodeData = {
+            id: node.id,
+            label: node.attr('label/text'),
+            data: node.getData()?.data || '', // Load existing data if present
+        }
+        setNodeData(nodeData)
+        setDataPreview(nodeData.data)
+        setIsModalVisible(true)
+    }
+
+    const handleOk = () => {
+        const { id, label, data } = nodeData
+        const node = graphRef.current?.getCellById(id)
+        if (node) {
+            node.attr('label/text', label)
+            node.setData({ data: data })
+        }
+        setIsModalVisible(false)
+        setNodeData({ id: '', label: '', data: '' })
+    }
+
+    const handleCancel = () => {
+        setIsModalVisible(false)
+        setNodeData({ id: '', label: '', data: '' })
+    }
+
+    const handleQuillChange = (value: string) => {
+        setNodeData({ ...nodeData, data: value })
+        setDataPreview(value)
+    }
 
     useEffect(() => {
         if (!containerRef.current || !stencilContainerRef.current) return
@@ -109,34 +81,62 @@ const DiagramEditor: React.FC = () => {
         graph.use(new Clipboard({ enabled: true }))
         graph.use(new Transform({ resizing: true }))
         graph.use(new Dnd({ target: graph }))
-        graph.use(new Selection({
-            enabled: true,
-            multiple: true,
-            rubberband: true,
-            movable: true,
-            showNodeSelectionBox: true,
-        }))
+        graph.use(
+            new Selection({
+                enabled: true,
+                multiple: true,
+                rubberband: true,
+                movable: true,
+                showNodeSelectionBox: true,
+            })
+        )
         graph.use(new History({ enabled: true }))
-        graph.use(new Keyboard({
-            enabled: true,
-            global: true,
-        }))
+        graph.use(
+            new Keyboard({
+                enabled: true,
+                global: true,
+            })
+        )
 
         graph.bindKey('ctrl+c', () => {
-            const cells = graph.getSelectedCells();
+            const cells = graph.getSelectedCells()
             if (cells.length) {
                 graph.copy(cells)
             }
-            return false;
+            return false
         })
 
         graph.bindKey('ctrl+v', () => {
             if (!graph.isClipboardEmpty()) {
-                const cells = graph.paste({ offset: 32 });
-                graph.cleanSelection();
-                graph.select(cells);
+                const cells = graph.paste({ offset: 32 })
+                graph.cleanSelection()
+                graph.select(cells)
             }
-            return false;
+            return false
+        })
+
+        graph.bindKey(['ctrl+z', 'meta+z'], () => {
+            graph.undo()
+            return false
+        })
+
+        graph.bindKey(['ctrl+y', 'meta+y'], () => {
+            graph.redo()
+            return false
+        })
+
+        graph.bindKey('delete', () => {
+            const cells = graph.getSelectedCells()
+            if (cells.length) {
+                cells.forEach((cell) => cell.remove())
+            }
+            return false
+        })
+
+        graph.bindKey(['ctrl+a', 'meta+a'], () => {
+            const cells = graph.getCells()
+            graph.select(cells)
+            return false
         })
 
         graph.centerContent()
@@ -166,72 +166,105 @@ const DiagramEditor: React.FC = () => {
 
         stencilContainerRef.current.appendChild(stencil.container)
 
-        const theme = graph.createNode({
-            shape: 'rect',
-            x: 40,
-            y: 40,
-            width: 80,
-            height: 40,
-            label: 'Тема',
-            attrs: themeAttrs,
-            ports: { ...ports },
-            tools: ['button-remove']
-        })
-
-        const topic = graph.createNode({
-            shape: 'rect',
-            x: 180,
-            y: 40,
-            width: 80,
-            height: 40,
-            label: 'Подтема',
-            attrs: topicAttrs,
-            tools: ['button-remove']
-        })
+        const theme = createThemeNode(graph)
+        const topic = createTopicNode(graph)
 
         stencil.load([theme], 'Theme')
         stencil.load([topic], 'Topic')
 
         graph.on('node:dblclick', ({ node }) => {
-            const label = prompt('Enter new label:', node.attr('label/text'))
-            if (label !== null) {
-                node.attr('label/text', label)
-            }
+            showModal(node)
         })
 
         graph.on('history:change', () => {
-            console.log('History changed')
+            saveGraphState()
         })
 
         graph.on('node:removed', ({ node }) => {
             const edges = graph.getConnectedEdges(node)
-            edges.forEach(edge => {
+            edges.forEach((edge) => {
                 edge.remove()
             })
         })
 
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
-                event.preventDefault()
-                graph.undo()
-            }
-            if ((event.ctrlKey || event.metaKey) && event.key === 'y') {
-                event.preventDefault()
-                graph.redo()
+        const saveGraphState = () => {
+            const graphData = graph.toJSON()
+            localStorage.setItem('graphData', JSON.stringify(graphData))
+        }
+
+        const loadGraphState = () => {
+            const graphData = localStorage.getItem('graphData')
+            if (graphData) {
+                graph.fromJSON(JSON.parse(graphData))
             }
         }
 
-        document.addEventListener('keydown', handleKeyDown)
-        return () => document.removeEventListener('keydown', handleKeyDown)
+        loadGraphState()
 
+        return () => {
+            graph.dispose()
+        }
+    }, [])
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const graphData = localStorage.getItem('graphData')
+            if (graphData) {
+                console.log('Sending data to server:', JSON.parse(graphData))
+            }
+        }, 15000)
+
+        return () => clearInterval(interval)
     }, [])
 
     return (
-        <div className="stencil-app">
-            <div className="app-stencil" ref={stencilContainerRef} />
-            <div className="app-content" ref={containerRef} />
+        <div>
+            <Flex style={{ padding: '20px' }} justify="space-between">
+                <Flex align="center">
+                    <Button icon={<RollbackOutlined />}>На главную</Button>
+                    <Typography.Title editable level={1} style={{ marginLeft: '100px', marginBottom: '5px' }}>
+                        Some diagram name
+                    </Typography.Title>
+                </Flex>
+                <Flex align="center">
+                    <Button icon={<CopyOutlined />}>Клонировать диаграмму</Button>
+                    <Select
+                        options={[
+                            { value: 'edit', label: 'Редактирование' },
+                            { value: 'view', label: 'Просмотр' },
+                        ]}
+                        style={{ width: '150px', marginLeft: '25px' }}
+                    />
+                </Flex>
+            </Flex>
+            <div className="stencil-app">
+                <div className="app-stencil" ref={stencilContainerRef} />
+                <div className="app-content" ref={containerRef} />
+            </div>
+            <Modal
+                title="Edit Node"
+                open={isModalVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <Input
+                    style={{ marginBottom: '10px' }}
+                    value={nodeData.label}
+                    onChange={(e) => setNodeData({ ...nodeData, label: e.target.value })}
+                    placeholder="Enter node label"
+                />
+                <ReactQuill
+                    value={nodeData.data}
+                    onChange={handleQuillChange}
+                    modules={{ toolbar: Toolbar }}
+                />
+                <div style={{ marginTop: '10px', borderTop: '1px solid #f0f0f0', paddingTop: '10px' }}>
+                    <Typography.Text strong>Preview:</Typography.Text>
+                    <div style={{ marginLeft: '20px' }} dangerouslySetInnerHTML={{ __html: dataPreview }} />
+                </div>
+            </Modal>
         </div>
     )
 }
 
-export default DiagramEditor;
+export default DiagramEditor
