@@ -4,6 +4,8 @@ import {UserOutlined} from "@ant-design/icons";
 import styles from "../ProfileCard/profile.module.css";
 import {getUserProfile} from "../../API/User/getUserProfile";
 import {putEditProfile} from "../../API/User/putEditProfile.ts";
+import {useNotification} from "../../Providers/NotificationProvider.tsx";
+import {EDIT_PROFILE_FAIL, EDIT_PROFILE_SUCCESS} from "../../Consts/strings.ts";
 
 const {Title, Text} = Typography;
 
@@ -11,6 +13,7 @@ const ProfileCard: React.FC = () => {
     const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [form] = Form.useForm();
+    const {notify} = useNotification();
 
     const fetchData = async () => {
         const data = await getUserProfile();
@@ -31,16 +34,27 @@ const ProfileCard: React.FC = () => {
         form.resetFields();
     };
 
-    const handleFormSubmit = async (values: UserProfile) => {
+    const handleFormSubmit = async (values: EditProfile) => {
         try {
-            console.log(values);
-            await putEditProfile(values);
-            setUserInfo(values);
-            setIsEditing(false);
+            const response = await putEditProfile({ values });
+
+            if (response && response.status === 200) {
+                setUserInfo((prevUserInfo) => ({
+                    ...prevUserInfo!,
+                    email: values.email,
+                    username: values.username,
+                }));
+                setIsEditing(false);
+                notify("success", EDIT_PROFILE_SUCCESS);
+            } else {
+                notify("error", EDIT_PROFILE_FAIL);
+            }
         } catch (error) {
-            console.error("Failed to update profile", error);
+            console.error("Failed to update profile:", error);
+            notify("error", EDIT_PROFILE_FAIL); // Notify user of the failure
         }
     };
+
 
     if (!userInfo) {
         return <Spin size="large"/>;
@@ -58,7 +72,7 @@ const ProfileCard: React.FC = () => {
                             form={form}
                             layout="vertical"
                             onFinish={handleFormSubmit}
-                            initialValues={userInfo}
+                            initialValues={{email: userInfo.email, username: userInfo.username}}
                         >
                             <Form.Item
                                 label="Email"
@@ -95,9 +109,14 @@ const ProfileCard: React.FC = () => {
                                 <Title level={4}>Username:</Title>
                                 <Text style={{fontSize: 20}}>{userInfo.username}</Text>
                             </div>
-                            <Button type="primary" onClick={handleEditClick}>
-                                Редактировать
-                            </Button>
+                            <Space direction="horizontal" size="middle" wrap>
+                                <Button type="primary" onClick={handleEditClick}>
+                                    Редактировать
+                                </Button>
+                                <Button>
+                                    Сменить пароль
+                                </Button>
+                            </Space>
                         </Space>
                     )}
                 </Col>

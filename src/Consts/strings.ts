@@ -9,3 +9,6 @@ export const REGISTRATION_EMAIL_FAIL = 'Пользователь с этим ema
 
 export const LOGIN_SUCCESS = 'Вы усрешно вошли в систему';
 export const LOGIN_FAIL = 'Неверный логин или пароль';
+
+export const EDIT_PROFILE_SUCCESS = "Данные успешно изменены";
+export const EDIT_PROFILE_FAIL = "Не удалось изменить данные";

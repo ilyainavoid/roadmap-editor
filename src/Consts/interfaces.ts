@@ -19,3 +19,8 @@ interface UserProfile{
     email: string;
     username: string;
 }
+
+interface EditProfile {
+    email: string;
+    username: string;
+}

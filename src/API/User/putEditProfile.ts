@@ -1,18 +1,11 @@
 import axiosInstance from "../axiosInstance.ts";
 
-interface EditProfile {
-    email: string;
-    username: string;
-}
 
-
-export const putEditProfile = async (values: EditProfile) => {
+export const putEditProfile = async ({values}: { values: EditProfile }) => {
     try {
-        let response = await axiosInstance.put(`/api/user`, {
-            values
-        });
+        let response = await axiosInstance.put(`/api/user`, values);
         console.log(response.data)
-        return response.data;
+        return response;
     } catch (error) {
         console.log(error)
     }
