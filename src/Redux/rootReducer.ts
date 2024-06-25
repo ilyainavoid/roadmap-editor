@@ -1,13 +1,11 @@
 import { combineReducers } from 'redux';
 import authReducer from "./reducers/authReducer.ts";
+import profileReducer from "./reducers/profileReducer.ts";
 
-
-export interface AuthState {
-    isAuth: boolean;
-}
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    profile: profileReducer,
 });
 
 export default rootReducer;

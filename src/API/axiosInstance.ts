@@ -41,9 +41,7 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if ((error.response.status === 401 || error.response.status == 500) && !originalRequest._retry) {
-            store.dispatch(setAuth(false));
-
+        if ((error.response.status === 401) && !originalRequest._retry) {
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
@@ -70,15 +68,16 @@ axiosInstance.interceptors.response.use(
                     "RefreshToken": refreshToken
                 });
 
-                setTokens(data.access_token, data.refresh_token);
-                axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
-                originalRequest.headers['Authorization'] = `Bearer ${data.access_token}`;
-                processQueue(null, data.access_token);
+                setTokens(data.AccessToken, data.RefreshToken);
+                axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${data.AccessToken}`;
+                originalRequest.headers['Authorization'] = `Bearer ${data.AccessToken}`;
+                processQueue(null, data.AccessToken);
                 store.dispatch(setAuth(true));
 
                 return axiosInstance(originalRequest);
             } catch (err) {
                 processQueue(err, null);
+                store.dispatch(setAuth(false));
                 return Promise.reject(err);
             } finally {
                 isRefreshing = false;

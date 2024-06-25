@@ -17,7 +17,7 @@ export const postRegistrationUser = async ({userCredentials}: {
         if (axios.isAxiosError(error)) {
             console.error('Axios error:', error.message);
             if (error.response) {
-                if (error.response.data.message === "User with this usrename already exists") {
+                if (error.response.data.message === "User with this username already exists") {
                     return {error: REGISTRATION_USERNAME_FAIL};
                 } else if (error.response.data.message === 'User with this email already exists') {
                     return {error: REGISTRATION_EMAIL_FAIL};
