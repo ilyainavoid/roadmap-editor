@@ -1,11 +1,23 @@
-.avatar{
-    background-color: rgb(180,191,143);
-    margin-left: 10px;
+.avatar {
+    background-color: rgb(180, 191, 143);
 }
 
 .card {
     box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
     border-radius: 0px;
-    width: 50%;
-    max-width: 600px;
+    width: 100%;
+    max-width: 700px;
+    min-height: 332px;
+    padding: 20px;
+    margin: auto;
+}
+
+.avatarContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.infoContainer {
+    margin-bottom: 20px;
 }
