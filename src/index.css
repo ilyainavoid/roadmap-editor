@@ -61,6 +61,7 @@ body {
 .pagination-container {
     display: flex;
     margin-top: 10px;
+    justify-content: center;
 }
 
 .container-column {
@@ -72,4 +73,8 @@ body {
 .container-row {
     display: flex;
     gap: 8px;
+}
+
+.avatar {
+    background-color: rgb(180, 191, 143);
 }

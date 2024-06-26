@@ -96,7 +96,7 @@ const ProfileCard: React.FC = () => {
         <Card className={styles.card}>
             <Row align="middle" gutter={[16, 16]}>
                 <Col xs={24} md={8} className={styles.avatarContainer}>
-                    <Avatar size={180} className={styles.avatar} icon={<UserOutlined/>}/>
+                    <Avatar size={180} className={"avatar"} icon={<UserOutlined/>}/>
                 </Col>
                 <Col xs={24} md={16}>
                     {isEditing ? (
