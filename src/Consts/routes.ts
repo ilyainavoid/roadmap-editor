@@ -3,6 +3,6 @@ export const routes = {
     login: () => '/login',
     registration: () => '/registration',
     profile: () => '/profile',
-    roadmap: (mode: string) => `/roadmap/${mode}`,
-    edit: () => '/edit'
+    roadmap: () => '/roadmap/:mode/:id',
+    error: () => '/error'
 }
