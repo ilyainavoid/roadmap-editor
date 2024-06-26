@@ -26,7 +26,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = getAccessToken();
-        if (token) {
+        if (token && token != "undefined") {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;
@@ -57,7 +57,7 @@ axiosInstance.interceptors.response.use(
             isRefreshing = true;
 
             const refreshToken = getRefreshToken();
-            if (!refreshToken) {
+            if (!refreshToken || refreshToken ==="undefined") {
                 return Promise.reject(error);
             }
 

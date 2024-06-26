@@ -9,5 +9,5 @@ export const routes = {
     myRoadmaps: () => '/roadmaps/my',
     stared: () => '/roadmaps/stared',
     private: () => '/roadmaps/private',
-    usersRoadmaps: (id?: string) => `/users/${id || ':userId'}/roadmaps`
+    usersRoadmaps: (username: string) => `/users/${username || ':username'}/roadmaps`
 };

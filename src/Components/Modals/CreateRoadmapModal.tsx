@@ -1,14 +1,14 @@
 import React from "react";
 import {Modal, Form, Input, Button} from "antd";
-import {validationRules} from "../../Consts/validationRules.ts";
+import TextArea from "antd/es/input/TextArea";
 
-interface EditPasswordModalProps {
+interface ModalProps {
     isOpen: boolean;
     onCancel: () => void;
-    onSubmit: (values: PasswordChanges) => void;
+    onSubmit: (values: RoadmapCreate) => void;
 }
 
-const EditPasswordModal: React.FC<EditPasswordModalProps> = ({isOpen, onCancel, onSubmit}) => {
+const CreateRoadmapModal: React.FC<ModalProps> = ({isOpen, onCancel, onSubmit}) => {
     const [form] = Form.useForm();
 
     const handleOk = async () => {
@@ -23,12 +23,12 @@ const EditPasswordModal: React.FC<EditPasswordModalProps> = ({isOpen, onCancel, 
 
     const footer = [
         <Button key="back" onClick={onCancel}>Отменить</Button>,
-        <Button type="primary" key="submit" onClick={handleOk}>Сохранить</Button>
+        <Button type="primary" key="submit" onClick={handleOk}>Создать</Button>
     ];
 
     return (
         <Modal
-            title="Редактировать пароль"
+            title="Создать дорожную карту"
             open={isOpen}
             onCancel={onCancel}
             onOk={handleOk}
@@ -37,22 +37,22 @@ const EditPasswordModal: React.FC<EditPasswordModalProps> = ({isOpen, onCancel, 
         >
             <Form form={form} layout="vertical">
                 <Form.Item
-                    label="Старый пароль"
-                    name="oldPassword"
-                    rules={validationRules.passwordValidation()}
+                    label="Название"
+                    name="name"
+                   //todo: add validation rules
                 >
-                    <Input.Password/>
+                    <Input/>
                 </Form.Item>
                 <Form.Item
-                    label="Новый Пароль"
-                    name="newPassword"
-                    rules={validationRules.passwordValidation()}
+                    label="Описание"
+                    name="description"
+                    //todo: add validation rules
                 >
-                    <Input.Password/>
+                    <TextArea showCount maxLength={80} style={{ height: 120, resize: 'none' }}/>
                 </Form.Item>
             </Form>
         </Modal>
     );
 };
 
-export default EditPasswordModal;
+export default CreateRoadmapModal;

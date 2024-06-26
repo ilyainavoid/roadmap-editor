@@ -47,5 +47,7 @@ export const validationRules = {
         Validation.requireRule(FILL_IN),
         Validation.inputValidation(MIN_1_DIGIT_REGEX, MIN_1_DIGIT),
         Validation.lengthValidation(6, MIN_6_LENGTH)
+        //todo: add validation rules
+
     ],
 }
