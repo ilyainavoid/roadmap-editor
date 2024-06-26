@@ -9,12 +9,11 @@ import Layout from "./Layout.tsx";
 import DiagramPage from "../Pages/DiagramPage/DiagramPage.tsx";
 import DiagramProtectedRoute from "../Providers/DiagramProtectedRoute.tsx";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
-import LayoutWithoutHeader from "./LayoutWithoutHeader.tsx";
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout />,
+        element: <Layout isHeaderVisible={true}/>,
         children: [
             {
                 element: (
@@ -49,7 +48,7 @@ export const router = createBrowserRouter([
     },
     {
         path: '/',
-        element: <LayoutWithoutHeader />,
+        element: <Layout isHeaderVisible={false}/>,
         children: [
             {
                 element: (
@@ -63,7 +62,7 @@ export const router = createBrowserRouter([
                         element: <DiagramPage/>
                     }
                 ]
-            }
-        ],
-    },
+            },
+        ]
+    }
 ]);
