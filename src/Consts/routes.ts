@@ -6,6 +6,7 @@ export const routes = {
     creatediagram: () => '/create',
     edit: () => '/edit',
     roadmaps: () => '/roadmaps',
+    myRoadmaps: () => '/roadmaps/my',
     stared: () => '/roadmaps/stared',
     private: () => '/roadmaps/private',
     usersRoadmaps: (id: string) => `/users/${id || ':userId'}/roadmaps`

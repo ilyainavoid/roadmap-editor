@@ -9,6 +9,7 @@ import Layout from "./Layout.tsx";
 import CreateDiagramPage from "../Pages/CreateDiagramPage/CreateDiagramPage.tsx";
 import PublicRoadmapPage from "../Pages/PublicRoadmapsPage/PublicRoadmapsPage.tsx";
 import StaredRoadmapsPage from "../Pages/StaredRoadmapsPage/StaredRoadmapsPage.tsx";
+import PrivateRoadmapsPage from "../Pages/PrivateRoadmapsPage/PrivateRoadmapsPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
                     {
                         path: routes.stared(),
                         element: <StaredRoadmapsPage/>
+                    },
+                    {
+                        path: routes.private(),
+                        element: <PrivateRoadmapsPage/>
                     }
                 ],
             },
