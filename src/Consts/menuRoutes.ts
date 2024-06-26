@@ -10,4 +10,5 @@ export const menuRoutes: MenuRoutes = {
     registration: routes.registration(),
     profile: routes.profile(),
     roadmaps: routes.roadmaps(),
+    stared: routes.stared(),
 };

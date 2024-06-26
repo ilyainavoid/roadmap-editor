@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {useSearchParams} from 'react-router-dom';
-import {Space, Button, Flex, Input, Pagination, Typography} from 'antd';
-import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
+import {Button, Flex, Input, Pagination, Space, Typography} from "antd";
+import React, {useEffect, useState} from "react";
+import {useSearchParams} from "react-router-dom";
 import {SearchOutlined} from "@ant-design/icons";
+import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 
 const {Title} = Typography;
 
-const PublicRoadmapPage: React.FC = () => {
+const StaredRoadmapsPage: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [total, SetTotal] = useState(50);
 
@@ -37,13 +37,13 @@ const PublicRoadmapPage: React.FC = () => {
     return (
         <>
             <Flex className="container" vertical>
-                <Title level={1}>Публичные роадмапы</Title>
+                <Title level={1}>Отмеченные роадмапы</Title>
                 <Flex className={"search-container"}>
                     <Space.Compact style={{width: '100%'}}>
-                        <Input addonBefore={<SearchOutlined />}
-                            placeholder="Найти роадмап по названию"
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
+                        <Input addonBefore={<SearchOutlined/>}
+                               placeholder="Найти роадмап по названию"
+                               value={searchValue}
+                               onChange={(e) => setSearchValue(e.target.value)}
                         />
                         <Button onClick={handleSearch}>Искать</Button>
                     </Space.Compact>
@@ -51,9 +51,9 @@ const PublicRoadmapPage: React.FC = () => {
                 <ListOfRoadmaps/>
                 {total > 0 && (
                     <Pagination className={"pagination-container"}
-                        current={currentPage}
-                        onChange={handlePageChange}
-                        total={total}
+                                current={currentPage}
+                                onChange={handlePageChange}
+                                total={total}
                     />
                 )}
             </Flex>
@@ -61,4 +61,4 @@ const PublicRoadmapPage: React.FC = () => {
     );
 };
 
-export default PublicRoadmapPage;
+export default StaredRoadmapsPage;
