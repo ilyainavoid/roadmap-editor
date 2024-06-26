@@ -1,11 +1,11 @@
-import { Flex, Pagination, Typography} from "antd";
-import React, {useEffect, useState} from "react";
-import {useSearchParams} from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import {useSearchParams} from 'react-router-dom';
+import {Flex, Pagination, Typography} from 'antd';
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 
 const {Title} = Typography;
 
-const StaredRoadmapsPage: React.FC = () => {
+const MyRoadmapsPage: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [total, SetTotal] = useState(50);
 
@@ -17,18 +17,16 @@ const StaredRoadmapsPage: React.FC = () => {
         setCurrentPage(page);
     }, [page]);
 
-
     const handlePageChange = (page: number) => {
 
         setSearchParams({page: page.toString()});
-
 
     };
 
     return (
         <>
             <Flex className="container" vertical>
-                <Title level={1}>Отмеченные роадмапы</Title>
+                <Title level={1}>Мои роадмапы</Title>
                 <ListOfRoadmaps/>
                 {total > 0 && (
                     <Pagination className={"pagination-container"}
@@ -42,4 +40,4 @@ const StaredRoadmapsPage: React.FC = () => {
     );
 };
 
-export default StaredRoadmapsPage;
+export default MyRoadmapsPage;
