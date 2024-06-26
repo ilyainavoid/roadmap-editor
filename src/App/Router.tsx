@@ -7,6 +7,9 @@ import RegistrationPage from "../Pages/RegistrationPage/RegistrationPage.tsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 import Layout from "./Layout.tsx";
 import DiagramPage from "../Pages/DiagramPage/DiagramPage.tsx";
+import DiagramProtectedRoute from "../Providers/DiagramProtectedRoute.tsx";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
+import LayoutWithoutHeader from "./LayoutWithoutHeader.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -37,11 +40,30 @@ export const router = createBrowserRouter([
             {
                 path: routes.registration(),
                 element: <RegistrationPage />
+            },
+            {
+                path: routes.error(),
+                element: <ErrorPage/>
             }
         ],
     },
     {
-        path: routes.roadmap(":mode"),
-        element: <DiagramPage />
-    }
+        path: '/',
+        element: <LayoutWithoutHeader />,
+        children: [
+            {
+                element: (
+                    <DiagramProtectedRoute>
+                        <Outlet/>
+                    </DiagramProtectedRoute>
+                ),
+                children: [
+                    {
+                        path: routes.roadmap(),
+                        element: <DiagramPage/>
+                    }
+                ]
+            }
+        ],
+    },
 ]);
