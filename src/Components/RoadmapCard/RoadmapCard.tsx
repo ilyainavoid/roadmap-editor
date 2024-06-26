@@ -4,6 +4,7 @@ import styles from './card.module.css';
 import { StarFilled, StarOutlined, UserOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/rootReducer.ts";
+import {useNavigate} from "react-router-dom";
 
 const { Text, Title } = Typography;
 
@@ -14,6 +15,7 @@ interface RoadmapCardProps {
 const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
     const [isStared, setIsStared] = useState<boolean>(roadmap.isStared);
     const [starsCount, setStarsCount] = useState<number>(roadmap.starsCount);
+    const navigate = useNavigate();
     const isAuth = useSelector((state: RootState) => state.auth.isAuth);
     const profile = useSelector((state: RootState) => state.profile.profile);
 
@@ -36,7 +38,7 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
     }
 
     const handleCardClick = () => {
-        // Implement navigation logic
+        navigate("/roadmap/view/b768ca55-6557-426b-8914-2ee340c17bf0")
         console.log("Navigate to roadmap details");
     }
 
@@ -48,18 +50,17 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
 
     return (
         <Card hoverable className={styles.roadmapCard} onClick={handleCardClick}>
-            <Title level={4} className={styles.title} ellipsis>
+            <Title level={4} ellipsis>
                 {roadmap.name}
             </Title>
             <Row gutter={[16, 16]}>
                 <Col xs={24} sm={24} md={18} lg={18}>
-                    <Text className={styles.description} ellipsis>{roadmap.description}</Text>
+                    <Text ellipsis>{roadmap.description}</Text>
                 </Col>
                 <Col xs={24} sm={24} md={6} lg={6}>
                     <Space direction="vertical">
-                        <Space className={styles.user} onClick={handleAuthorClick}>
-                            <UserOutlined />
-                            <Text className={styles.text} ellipsis>{roadmap.user.username}</Text>
+                        <Space onClick={handleAuthorClick}>
+                            <Text ellipsis className={styles.user}><UserOutlined /> {roadmap.user.username}</Text>
                         </Space>
                         <Space>
                             {isStared ? (

@@ -35,11 +35,14 @@ interface RoadmapPaged {
     name: string;
     description: string;
     user: UserProfile;
-/*
-    status: Status;
-*/
+    status: string;
     starsCount: number;
     topicCount: number;
     topicsClosed: number;
     isStared: boolean;
+}
+
+interface RoadmapCreate{
+    name: string;
+    description: string;
 }

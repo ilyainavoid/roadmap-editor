@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./list.module.css";
 import {Col, Row} from "antd";
 import RoadmapCard from "../RoadmapCard/RoadmapCard.tsx";
+import {Status} from "../../Consts/statuses.ts";
 
 
 const roadmapExamples: RoadmapPaged[] = [
@@ -14,9 +15,7 @@ const roadmapExamples: RoadmapPaged[] = [
             email: 'user1@example.com',
             username: 'user1 user1 user1 user1'
         },
-/*
         status: Status.Public,
-*/
         starsCount: 42,
         topicCount: 10,
         topicsClosed: 10,
@@ -31,9 +30,7 @@ const roadmapExamples: RoadmapPaged[] = [
             email: 'user2@example.com',
             username: 'user2'
         },
-/*
         status: Status.Private,
-*/
         starsCount: 35,
         topicCount: 20,
         topicsClosed: 15,
@@ -48,9 +45,7 @@ const roadmapExamples: RoadmapPaged[] = [
             email: 'user3@example.com',
             username: 'user3'
         },
-/*
         status: Status.PrivateSharing,
-*/
         starsCount: 27,
         topicCount: 30,
         topicsClosed: 25,
@@ -65,9 +60,7 @@ const roadmapExamples: RoadmapPaged[] = [
             email: 'user4@example.com',
             username: 'user4'
         },
-/*
         status: Status.Public,
-*/
         starsCount: 58,
         topicCount: 40,
         topicsClosed: 35,
@@ -82,9 +75,7 @@ const roadmapExamples: RoadmapPaged[] = [
             email: 'user5@example.com',
             username: 'user5'
         },
-        /*
-                status: Status.Public,
-        */
+        status: Status.Public,
         starsCount: 58,
         topicCount: 40,
         topicsClosed: 35,
@@ -99,7 +90,7 @@ const ListOfRoadmaps: React.FC = () => {
                 <Row gutter={16}>
                     {roadmapExamples.map((roadmap, index) => (
                         <Col key={index} xs={24} sm={24} md={12} lg={12}
-                            style={{marginBottom: 16}}
+                             style={{marginBottom: 16}}
                         >
                             <RoadmapCard roadmap={roadmap}/>
                         </Col>
