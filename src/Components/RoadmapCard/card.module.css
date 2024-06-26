@@ -5,36 +5,12 @@
     max-height: 200px;
 }
 
-
-.title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%; /* Adjust as needed */
-}
-
 .user {
-    display: flex;
-    align-items: center;
-    overflow: hidden;
+
+    transition: color 0.3s ease-in-out;
 }
 
-.user:hover  {
+
+.user:hover {
     color: #01b009;
-}
-
-.text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 150px; /* Adjust as needed */
-}
-
-.description {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%; /* Adjust as needed */
-    display: inline-block;
-    width: 100%; /* Ensure it takes the full width */
 }

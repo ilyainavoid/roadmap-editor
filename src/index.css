@@ -45,6 +45,10 @@ body {
     color: gold;
 }
 
+.unstar{
+    transition: color 0.3s ease-in-out;
+}
+
 .unstar:hover{
     color: gold;
 }
