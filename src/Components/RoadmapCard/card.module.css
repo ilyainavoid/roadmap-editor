@@ -1,5 +1,40 @@
-.roadmapCard{
-    background-color: rgb(237,244,242);
+.roadmapCard {
+    background-color: rgb(237, 244, 242);
     border-color: #4f7e5c;
+    min-height: 162px;
+    max-height: 200px;
+}
 
+
+.title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%; /* Adjust as needed */
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.user:hover  {
+    color: #01b009;
+}
+
+.text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px; /* Adjust as needed */
+}
+
+.description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%; /* Adjust as needed */
+    display: inline-block;
+    width: 100%; /* Ensure it takes the full width */
 }
