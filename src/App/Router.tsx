@@ -7,6 +7,8 @@ import RegistrationPage from "../Pages/RegistrationPage/RegistrationPage.tsx";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 import Layout from "./Layout.tsx";
 import CreateDiagramPage from "../Pages/CreateDiagramPage/CreateDiagramPage.tsx";
+import PublicRoadmapPage from "../Pages/PublicRoadmapsPage/PublicRoadmapsPage.tsx";
+import StaredRoadmapsPage from "../Pages/StaredRoadmapsPage/StaredRoadmapsPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +25,10 @@ export const router = createBrowserRouter([
                     {
                         path: routes.profile(),
                         element: <ProfilePage/>
+                    },
+                    {
+                        path: routes.stared(),
+                        element: <StaredRoadmapsPage/>
                     }
                 ],
             },
@@ -37,6 +43,10 @@ export const router = createBrowserRouter([
             {
                 path: routes.registration(),
                 element: <RegistrationPage/>
+            },
+            {
+              path: routes.roadmaps(),
+              element: <PublicRoadmapPage/>
             },
             {
                 path: routes.creatediagram(),

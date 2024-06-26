@@ -15,3 +15,5 @@ export const EDIT_PROFILE_FAIL = "Не удалось изменить данн�
 
 export const CHANGE_PASSWORD_SUCCESS = "Вы успешно изменили пароль";
 export const CHANGE_PASSWORD_FAIL = "Не удалось поменять пароль";
+
+export const WELCOME_STRING = "Добро пожаловать!";

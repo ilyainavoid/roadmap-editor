@@ -8,17 +8,22 @@ interface MenuItem {
 }
 
 export const generateMenuItems = (isAuth: boolean): MenuItem[] => {
-    let menuItems: MenuItem[] = [{ key: 'main', label: 'Главная' }];
+    let menuItems: MenuItem[] =
+        [
+            {key: 'main', label: 'Главная'},
+            {key: 'roadmaps', label: 'Роадмапы'}
+        ];
 
     if (isAuth) {
         menuItems.push(
-
-            { key: 'profile', label: 'Профиль', style: { marginLeft: 'auto' }, isDropdown: true }
+            {key: 'stared', label: 'Отмеченные'},
+            {key: 'private', label: 'Доступные'},
+            {key: 'profile', label: 'Профиль', style: {marginLeft: 'auto'}, isDropdown: true}
         );
     } else {
         menuItems.push(
-            { key: 'registration', label: 'Регистрация', style: { marginLeft: 'auto' } },
-            { key: 'login', label: 'Вход' }
+            {key: 'registration', label: 'Регистрация', style: {marginLeft: 'auto'}},
+            {key: 'login', label: 'Вход'}
         );
     }
 

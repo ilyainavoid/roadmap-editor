@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import { Card, Col, Row, Space, Typography, Progress } from "antd";
+import React, {useState} from "react";
+import {Card, Col, Row, Space, Typography, Progress} from "antd";
 import styles from './card.module.css';
-import { StarFilled, StarOutlined, UserOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { RootState } from "../../Redux/rootReducer.ts";
+import {StarFilled, StarOutlined, UserOutlined} from "@ant-design/icons";
+import {useSelector} from "react-redux";
+import {RootState} from "../../Redux/rootReducer.ts";
 import {useNavigate} from "react-router-dom";
+import {Status} from "../../Consts/statuses.ts";
+import {routes} from "../../Consts/routes.ts";
 
-const { Text, Title } = Typography;
+const {Text, Title} = Typography;
 
 interface RoadmapCardProps {
     roadmap: RoadmapPaged;
 }
 
-const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
+const RoadmapCard: React.FC<RoadmapCardProps> = ({roadmap}) => {
     const [isStared, setIsStared] = useState<boolean>(roadmap.isStared);
     const [starsCount, setStarsCount] = useState<number>(roadmap.starsCount);
     const navigate = useNavigate();
@@ -38,14 +40,13 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
     }
 
     const handleCardClick = () => {
-        navigate("/roadmap/view/b768ca55-6557-426b-8914-2ee340c17bf0")
+        //todo: redirect to roadmap
         console.log("Navigate to roadmap details");
     }
 
     const handleAuthorClick = (event: React.MouseEvent) => {
         event.stopPropagation();
-        // Implement navigation logic
-        console.log("Navigate to user profile");
+        navigate(routes.usersRoadmaps(roadmap.user.id));
     }
 
     return (
@@ -60,20 +61,29 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
                 <Col xs={24} sm={24} md={6} lg={6}>
                     <Space direction="vertical">
                         <Space onClick={handleAuthorClick}>
-                            <Text ellipsis className={styles.user}><UserOutlined /> {roadmap.user.username}</Text>
+                            <Text ellipsis className={styles.user}><UserOutlined/> {roadmap.user.username}</Text>
                         </Space>
                         <Space>
-                            {isStared ? (
-                                <StarFilled className={"star"} onClick={handleUnstarClick} />
-                            ) : (
-                                <StarOutlined className={"unstar"} onClick={handleStarClick} />
-                            )}
-                            <Text>{starsCount}</Text>
+                            {
+                                (roadmap.status !== Status.Private && roadmap.status !== Status.PrivateSharing) && (
+                                    isStared ? (
+                                        <>
+                                            <StarFilled className="star" onClick={handleUnstarClick} />
+                                            <Text>{starsCount}</Text>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <StarOutlined className="unstar" onClick={handleStarClick} />
+                                            <Text>{starsCount}</Text>
+                                        </>
+                                    )
+                                )
+                            }
                         </Space>
                     </Space>
                 </Col>
             </Row>
-            {(isAuth && progressPercent > 0) && (<Progress percent={progressPercent} />)}
+            {(isAuth && progressPercent > 0) && (<Progress percent={progressPercent}/>)}
         </Card>
     );
 };

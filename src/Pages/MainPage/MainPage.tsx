@@ -1,18 +1,31 @@
-import {Button, Flex} from "antd";
-import React, {useState} from "react";
+import {Flex, Typography} from "antd";
+import React from "react";
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
-import AddUserModal from "../../Components/Modals/AddUserModal/AddUserModal.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../../Redux/rootReducer.ts";
+import {WELCOME_STRING} from "../../Consts/strings.ts";
+
+const {Title, Text} = Typography;
 
 const MainPage: React.FC = () => {
-    const [isModalOpen, setModalOpen] = useState(false);
+    const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
     return (
         <>
-            <Button onClick={() => setModalOpen(true)}>Пользователи</Button>
-            <Flex className={"container"}>
-                <ListOfRoadmaps />
+            <Flex className="container" vertical>
+                {isAuth ? (
+                    <>
+                        <Title level={1}>Недавно посещенные</Title>
+                        <ListOfRoadmaps/>
+                    </>
+
+
+                ) : (<>
+                        <Text>{WELCOME_STRING}</Text>
+                    </>
+
+                )}
             </Flex>
-            <AddUserModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
         </>
 
     );

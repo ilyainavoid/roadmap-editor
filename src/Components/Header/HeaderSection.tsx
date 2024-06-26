@@ -10,6 +10,7 @@ import DropdownProfile from "../DropdownProfile/DropDownProfile.tsx";
 import {getUserProfile} from "../../API/User/getUserProfile.ts";
 import {setProfile} from "../../Redux/actions/profileAction.ts";
 import {AppDispatch} from "../../Redux/store.ts";
+import {routes} from "../../Consts/routes.ts";
 
 const {Header} = Layout;
 
@@ -40,7 +41,7 @@ const HeaderLayout: React.FC = () => {
 
     const handleMenuClick = (e: { key: string }) => {
         const path = menuRoutes[e.key];
-        if (path) navigate(path);
+        if (path && path != routes.profile()) navigate(path);
     };
 
     const currentKey = pathToKey[location.pathname];

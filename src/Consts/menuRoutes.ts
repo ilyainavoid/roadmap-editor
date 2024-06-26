@@ -9,4 +9,5 @@ export const menuRoutes: MenuRoutes = {
     login: routes.login(),
     registration: routes.registration(),
     profile: routes.profile(),
+    roadmaps: routes.roadmaps(),
 };
