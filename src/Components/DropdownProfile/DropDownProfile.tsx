@@ -46,7 +46,7 @@ const DropdownProfile: React.FC<DropdownProfileProps> = ({username}) => {
             key: '3',
             danger: true,
             label: 'Выйти',
-            onClick: logout,
+            onClick: ()=> logout(),
         },
     ];
 
