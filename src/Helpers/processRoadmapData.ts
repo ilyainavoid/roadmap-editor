@@ -1,6 +1,6 @@
 import {getSpecifiedRoadmap} from "../API/Roadmaps/getSpecifiedRoadmap.ts";
 import axios from "axios";
-import { setGraphData} from "../Redux/actions/graphAction.ts";
+import {setGraphData, setModifier} from "../Redux/actions/graphAction.ts";
 import store from "../Redux/store.ts";
 import {setRole} from "../Redux/actions/userAction.ts";
 import {setProgress, updateStatus} from "../Redux/actions/progressAction.ts";
@@ -19,9 +19,11 @@ const processRoadmapData = async (mode: string, id: string, userProfile: UserPro
             topicsClosed: roadmapResponse.topicsClosed,
             topicsCount: roadmapResponse.topicsCount
         }));
-        roadmapResponse.progress.forEach((item: ProgressItem) => {
-            store.dispatch(updateStatus(item.Id, item.Status));
-        });
+        if (roadmapResponse.progress) {
+            roadmapResponse.progress.forEach((item: ProgressItem) => {
+                store.dispatch(updateStatus(item.Id, item.Status));
+            });
+        }
         const checkRole = (): boolean => {
             const roadmapUserId = roadmapResponse.user.id;
             if (userProfile) {
@@ -41,6 +43,7 @@ const processRoadmapData = async (mode: string, id: string, userProfile: UserPro
         if (mode === 'edit') {
             return isUserOwner;
         }
+        store.dispatch(setModifier(roadmapResponse.status))
         store.dispatch(setGraphData(roadmapResponse.content))
         return true;
     } catch (error) {

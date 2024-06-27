@@ -38,7 +38,7 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({ roadmap }) => {
     }
 
     const handleCardClick = () => {
-        navigate("/roadmap/view/3b4574fc-f31f-485c-9f60-2a47789aa1ac")
+        navigate("/roadmap/view/eabe7931-1ffb-4f52-bb7d-b2b611d1b99d")
         console.log("Navigate to roadmap details");
     }
 

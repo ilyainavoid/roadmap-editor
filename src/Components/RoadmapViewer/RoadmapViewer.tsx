@@ -2,15 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Graph } from '@antv/x6';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../Redux/rootReducer';
-import { Drawer, Flex, Select } from "antd";
+import { Drawer, Flex, Select } from 'antd';
 import parse from 'html-react-parser';
-import { putTopicProgress } from "../../API/Topic/putTopicProgress.ts";
-import store from "../../Redux/store.ts";
+import { putTopicProgress } from '../../API/Topic/putTopicProgress.ts';
+import store from '../../Redux/store.ts';
 import {
     decrementTopicsClosed,
     incrementTopicsClosed,
-    updateStatus
-} from "../../Redux/actions/progressAction.ts";
+    updateStatus,
+} from '../../Redux/actions/progressAction.ts';
 
 interface RoadmapViewerProps {
     id: string | undefined;
@@ -26,13 +26,57 @@ const RoadmapViewer: React.FC<RoadmapViewerProps> = ({ id }) => {
     const progressDetailed = useSelector((state: RootState) => state.progress.idStatusMap);
     const [status, setStatus] = useState<string>('Pending');
 
+    const applyNodeStyle = (node: any, status: string) => {
+        switch (status) {
+            case 'Pending':
+                node.attr({
+                    body: {
+                        stroke: '#d9d9d9',
+                        strokeWidth: 1,
+                        fill: '#fff',
+                    }
+                });
+                break;
+            case 'InProgress':
+                node.attr({
+                    body: {
+                        stroke: '#ffa500',
+                        strokeWidth: 2,
+                        fill: '#fff',
+                    }
+                });
+                break;
+            case 'ChangedByAuthor':
+                node.attr({
+                    body: {
+                        stroke: '#1890ff',
+                        strokeWidth: 2,
+                        fill: '#fff',
+                    }
+                });
+                break;
+            case 'Closed':
+                node.attr({
+                    body: {
+                        stroke: '#52c41a',
+                        strokeWidth: 2,
+                        fill: '#fff',
+                    },
+                    label: {
+                        textDecoration: 'line-through',
+                    },
+                });
+                break;
+            default:
+                break;
+        }
+    };
+
     const showDrawer = (data: any, nodeId: string) => {
         setCellData(data);
         setCurrentNodeId(nodeId);
         setStatus(progressDetailed[nodeId] || 'Pending');
         setOpen(true);
-        console.log(`node id :${currentNodeId}`)
-        console.log(`progressDetailed[nodeId] :${progressDetailed[nodeId]}`)
     };
 
     const onClose = () => {
@@ -46,15 +90,16 @@ const RoadmapViewer: React.FC<RoadmapViewerProps> = ({ id }) => {
         if (!currentNodeId) return;
         await putTopicProgress(id, currentNodeId, value);
         store.dispatch(updateStatus(currentNodeId, value));
-        if ((status !== 'Closed') && (value === 'Closed')) {
+        if (status !== 'Closed' && value === 'Closed') {
             store.dispatch(incrementTopicsClosed());
-        } else if (
-            status === 'Closed' &&
-            (value === 'InProgress' || value === 'ChangedByAuthor' || value === 'Pending')
-        ) {
+        } else if (status === 'Closed' && (value === 'InProgress' || value === 'ChangedByAuthor' || value === 'Pending')) {
             store.dispatch(decrementTopicsClosed());
         }
         setStatus(value);
+        if (graphRef.current) {
+            const node = graphRef.current.getCellById(currentNodeId);
+            applyNodeStyle(node, value);
+        }
     };
 
     const statusOptions = [
@@ -77,7 +122,12 @@ const RoadmapViewer: React.FC<RoadmapViewerProps> = ({ id }) => {
                 visible: true,
             },
             connecting: {
-                allowNode: true,
+                allowBlank: false,
+                allowMulti: false,
+                allowLoop: false,
+                allowNode: false,
+                allowEdge: false,
+                allowPort: false,
             },
             panning: {
                 enabled: true,
@@ -92,11 +142,18 @@ const RoadmapViewer: React.FC<RoadmapViewerProps> = ({ id }) => {
             },
         });
 
-        if (graphData && graphData.cells) {
+        const storedData = sessionStorage.getItem('graphData');
+
+        if (storedData) {
+            graph.fromJSON(JSON.parse(storedData));
+        } else if (graphData && graphData.cells) {
             graph.fromJSON(graphData.cells);
         }
 
         graph.getNodes().forEach((node) => {
+            const nodeId = node.id;
+            const nodeStatus = progressDetailed[nodeId] || 'Pending';
+            applyNodeStyle(node, nodeStatus);
             node.removeTools();
         });
 
@@ -111,7 +168,7 @@ const RoadmapViewer: React.FC<RoadmapViewerProps> = ({ id }) => {
         return () => {
             graph.dispose();
         };
-    }, [graphData]);
+    }, [graphData, progressDetailed]);
 
     return (
         <>

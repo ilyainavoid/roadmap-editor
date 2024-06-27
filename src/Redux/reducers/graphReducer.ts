@@ -1,4 +1,4 @@
-import {GraphAction, GraphActionType, GraphState} from "../types/graphType.ts";
+import { GraphAction, GraphActionType, GraphState } from "../types/graphType.ts";
 
 const initialState: GraphState = {
     graphData: {
@@ -6,6 +6,7 @@ const initialState: GraphState = {
         nodes: [],
         edges: [],
     },
+    modifier: '',
 };
 
 const graphReducer = (state = initialState, action: GraphAction): GraphState => {
@@ -14,6 +15,11 @@ const graphReducer = (state = initialState, action: GraphAction): GraphState => 
             return {
                 ...state,
                 graphData: action.payload,
+            };
+        case GraphActionType.SET_MODIFIER:
+            return {
+                ...state,
+                modifier: action.payload,
             };
         default:
             return state;

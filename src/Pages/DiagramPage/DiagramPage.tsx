@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import DiagramEditor from "../../Components/DiagramEditor/DiagramEditor.tsx";
 import {Button, Flex, Progress, Select, Typography} from "antd";
-import { CopyOutlined, RollbackOutlined } from "@ant-design/icons";
+import { RollbackOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import RoadmapViewer from "../../Components/RoadmapViewer/RoadmapViewer.tsx";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/rootReducer.ts";
+import AddUserModal from "../../Components/Modals/AddUserModal/AddUserModal.tsx";
 
 const calculateProgress = (closed: number, total: number): number => {
     if (total === 0) {
@@ -19,9 +20,11 @@ const DiagramPage: React.FC = () => {
     const { mode, id } = useParams<{ mode: string, id: string }>();
     const [currentInteractionMode, setCurrentInteractionMode] = useState<string>('');
     const userRole = useSelector((state: RootState) => state.user.role);
+    const roadmapModifier = useSelector((state: RootState) => state.graph.modifier);
     const navigate = useNavigate();
     const progressData = useSelector((state: RootState) => state.progress.progressData);
     const [percentage, setPercentage] = useState<number>(calculateProgress(progressData.topicsClosed, progressData.topicsCount))
+    const [isModalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         if (mode) {
@@ -69,7 +72,8 @@ const DiagramPage: React.FC = () => {
                     </Typography.Title>
                 </Flex>
                 <Flex align="center">
-                    <Button icon={<CopyOutlined />}>Клонировать диаграмму</Button>
+                    {(mode === 'view' && roadmapModifier === 'Private' && userRole === 'owner') ? <Button>Скопировать</Button> : <></>}
+                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button onClick={() => setModalOpen(true)}>Пригласить</Button><AddUserModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} /></> : <></>}
                     <Select
                         value={currentInteractionMode}
                         onChange={handleModeChange}
