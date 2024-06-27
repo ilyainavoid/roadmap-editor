@@ -3,14 +3,25 @@ import axios from "axios";
 import { setGraphData} from "../Redux/actions/graphAction.ts";
 import store from "../Redux/store.ts";
 import {setRole} from "../Redux/actions/userAction.ts";
+import {setProgress, updateStatus} from "../Redux/actions/progressAction.ts";
 
-const checkAccess = async (mode: string, id: string, userProfile: UserProfile | null): Promise<boolean> => {
+interface ProgressItem {
+    Id: string;
+    Status: string;
+}
 
-
+const processRoadmapData = async (mode: string, id: string, userProfile: UserProfile | null): Promise<boolean> => {
 
     try {
         const roadmapResponse = await getSpecifiedRoadmap(id);
         store.dispatch(setGraphData(roadmapResponse.content))
+        store.dispatch(setProgress({
+            topicsClosed: roadmapResponse.topicsClosed,
+            topicsCount: roadmapResponse.topicsCount
+        }));
+        roadmapResponse.progress.forEach((item: ProgressItem) => {
+            store.dispatch(updateStatus(item.Id, item.Status));
+        });
         const checkRole = (): boolean => {
             const roadmapUserId = roadmapResponse.user.id;
             if (userProfile) {
@@ -43,4 +54,4 @@ const checkAccess = async (mode: string, id: string, userProfile: UserProfile | 
     }
 }
 
-export default checkAccess;
+export default processRoadmapData;

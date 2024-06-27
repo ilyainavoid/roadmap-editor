@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from "react";
 import DiagramEditor from "../../Components/DiagramEditor/DiagramEditor.tsx";
-import { Button, Flex, Select, Typography } from "antd";
+import {Button, Flex, Progress, Select, Typography} from "antd";
 import { CopyOutlined, RollbackOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import RoadmapViewer from "../../Components/RoadmapViewer/RoadmapViewer.tsx";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/rootReducer.ts";
 
+const calculateProgress = (closed: number, total: number): number => {
+    if (total === 0) {
+        return 0;
+    }
+    const progress = (closed / total) * 100;
+    return parseInt(progress.toFixed(0), 10);
+};
+
 const DiagramPage: React.FC = () => {
     const { mode, id } = useParams<{ mode: string, id: string }>();
     const [currentInteractionMode, setCurrentInteractionMode] = useState<string>('');
     const userRole = useSelector((state: RootState) => state.user.role);
     const navigate = useNavigate();
+    const progressData = useSelector((state: RootState) => state.progress.progressData);
+    const [percentage, setPercentage] = useState<number>(calculateProgress(progressData.topicsClosed, progressData.topicsCount))
 
     useEffect(() => {
         if (mode) {
@@ -19,9 +29,13 @@ const DiagramPage: React.FC = () => {
         }
     }, [mode]);
 
+    useEffect(() => {
+        setPercentage(calculateProgress(progressData.topicsClosed, progressData.topicsCount));
+    }, [progressData]);
+
     const handleModeChange = (value: string) => {
         setCurrentInteractionMode(value);
-        navigate(`/roadmap/${value}`);
+        navigate(`/roadmap/${value}/${id}`);
     };
 
     interface Option {
@@ -64,8 +78,11 @@ const DiagramPage: React.FC = () => {
                     />
                 </Flex>
             </Flex>
+            <Flex align="center" justify="space-around" style={{paddingBottom: '20px'}}>
+                {mode === 'view' ?  <Progress style={{width: '95vw'}} percent={percentage} /> : <></>}
+            </Flex>
             <div style={{ flex: 1, overflow: 'auto' }}>
-                {mode === 'view' ? <RoadmapViewer /> : <DiagramEditor />}
+                {mode === 'view' ? <RoadmapViewer id = {id} /> : <DiagramEditor id = {id} />}
             </div>
         </div>
     );

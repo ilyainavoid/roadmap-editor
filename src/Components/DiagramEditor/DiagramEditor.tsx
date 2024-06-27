@@ -16,8 +16,15 @@ import { createThemeNode, createTopicNode } from '../../Consts/nodes.ts';
 import Toolbar from '../../Consts/toolbar.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../Redux/rootReducer.ts';
+import store from "../../Redux/store.ts";
+import {setGraphData} from "../../Redux/actions/graphAction.ts";
+import {putRoadmapContent} from "../../API/Roadmaps/putRoadmapContent.ts";
 
-const DiagramEditor: React.FC = () => {
+interface DiagramEditorProps {
+    id: string | undefined;
+}
+
+const DiagramEditor: React.FC<DiagramEditorProps> = ({ id }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const stencilContainerRef = useRef<HTMLDivElement>(null);
     const graphRef = useRef<Graph | null>(null);
@@ -84,6 +91,7 @@ const DiagramEditor: React.FC = () => {
             mousewheel: true,
         });
 
+        console.log(graphData.cells)
         if (graphData && graphData.cells) {
             graph.fromJSON(graphData.cells)
         }
@@ -200,17 +208,10 @@ const DiagramEditor: React.FC = () => {
 
         const saveGraphState = () => {
             const graphData = graph.toJSON();
-            localStorage.setItem('graphData', JSON.stringify(graphData));
-        };
-
-        const loadGraphState = () => {
-            const graphData = localStorage.getItem('graphData');
-            if (graphData) {
-                graph.fromJSON(JSON.parse(graphData));
-            }
-        };
-
-        loadGraphState();
+            console.log(graphData)
+            sessionStorage.setItem('graphData', JSON.stringify(graphData));
+            store.dispatch(setGraphData(graphData));
+        }
 
         return () => {
             graph.dispose();
@@ -218,15 +219,22 @@ const DiagramEditor: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const graphData = localStorage.getItem('graphData');
-            if (graphData) {
-                console.log('Sending data to server:', JSON.parse(graphData));
+        const interval = setInterval( async () => {
+            const storedData = sessionStorage.getItem('graphData');
+            if (storedData) {
+                try {
+                    await putRoadmapContent(id, storedData)
+                }
+                catch (e) {
+                    console.log(e)
+                }
             }
         }, 15000);
 
         return () => clearInterval(interval);
     }, []);
+
+
 
     return (
         <div>

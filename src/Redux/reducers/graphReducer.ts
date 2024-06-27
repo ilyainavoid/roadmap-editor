@@ -1,13 +1,4 @@
-import {GraphAction, GraphActionType} from "../types/graphType.ts";
-import {Edge, Node} from "@antv/x6";
-
-export interface GraphState {
-    graphData: {
-        cells: (Node.Metadata | Edge.Metadata)[];
-        nodes?: Node.Metadata[];
-        edges?: Edge.Metadata[];
-    };
-}
+import {GraphAction, GraphActionType, GraphState} from "../types/graphType.ts";
 
 const initialState: GraphState = {
     graphData: {
