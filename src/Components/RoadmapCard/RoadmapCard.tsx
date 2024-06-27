@@ -73,7 +73,7 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({roadmap}) => {
         event.stopPropagation();
         let response = await postRoadmapCopy(roadmap.id);
         if (response) {
-            //todo: redirect
+            navigate(routes.roadmap('edit', response))
         } else {
             console.log("error");
         }
