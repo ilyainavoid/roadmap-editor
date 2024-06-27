@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {useSearchParams} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import {Button, Flex, FloatButton, Pagination, Space, Typography} from 'antd';
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 import {getMyRoadmaps} from "../../API/Roadmaps/getMyRoadmaps.ts";
 import {NO_ROADMAPS_YET} from "../../Consts/strings.ts";
 import CreateRoadmapModal from "../../Components/Modals/CreateRoadmapModal.tsx";
 import {postRoadmapCreate} from "../../API/Roadmaps/postRoadmapCreate.ts";
+import {routes} from "../../Consts/routes.ts";
 
 const {Title} = Typography;
 
@@ -14,6 +15,7 @@ const MyRoadmapsPage: React.FC = () => {
     const [roadmaps, setRoadmaps] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
     const [total, setTotal] = useState(0);
+    const navigate = useNavigate();
 
     const page = parseInt(searchParams.get('page') || '1', 10);
 
@@ -46,7 +48,7 @@ const MyRoadmapsPage: React.FC = () => {
         let response = await postRoadmapCreate(data)
         if (response) {
             setIsOpen(false)
-            //todo: redirect
+            navigate(routes.roadmap('edit', response))
         } else {
             console.log("error")
         }

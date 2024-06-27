@@ -40,7 +40,7 @@ const HeaderLayout: React.FC = () => {
         let response = await postRoadmapCreate(data)
         if (response) {
             setIsOpen(false)
-            //todo: redirect
+            navigate(routes.roadmap("edit", response))
         } else {
             console.log("error")
         }

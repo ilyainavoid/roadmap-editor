@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import DiagramEditor from "../../Components/DiagramEditor/DiagramEditor.tsx";
-import {Button, Flex, Progress, Select, Typography} from "antd";
+import {Button, Flex, Modal, Progress, Select, Tooltip, Typography} from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import RoadmapViewer from "../../Components/RoadmapViewer/RoadmapViewer.tsx";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/rootReducer.ts";
 import AddUserModal from "../../Components/Modals/AddUserModal.tsx";
+import {postRoadmapPublish} from "../../API/RoadmapAccess/postRoadmapPublish.ts";
+import {setModifier} from "../../Redux/actions/graphAction.ts";
+import {getSpecifiedRoadmap} from "../../API/Roadmaps/getSpecifiedRoadmap.ts";
 
 const calculateProgress = (closed: number, total: number): number => {
     if (total === 0) {
@@ -26,11 +29,18 @@ const DiagramPage: React.FC = () => {
     const [percentage, setPercentage] = useState<number>(calculateProgress(progressData.topicsClosed, progressData.topicsCount))
     const [isModalOpen, setModalOpen] = useState(false);
 
+
     useEffect(() => {
         if (mode) {
             setCurrentInteractionMode(mode);
         }
     }, [mode]);
+
+    useEffect(() => {
+        if (roadmapModifier) {
+            setModifier(roadmapModifier);
+        }
+    }, [roadmapModifier])
 
     useEffect(() => {
         setPercentage(calculateProgress(progressData.topicsClosed, progressData.topicsCount));
@@ -48,7 +58,13 @@ const DiagramPage: React.FC = () => {
     }
 
     const prepareSelectValues = (role: string | null): Option[]  => {
-        if (role === 'owner') {
+        if (roadmapModifier === 'Public') {
+            return [
+                { value: 'edit', label: 'Редактирование', disabled: true},
+                { value: 'view', label: 'Просмотр' },
+            ];
+        }
+        else if (role === 'owner') {
             return [
                 { value: 'edit', label: 'Редактирование' },
                 { value: 'view', label: 'Просмотр' },
@@ -62,19 +78,29 @@ const DiagramPage: React.FC = () => {
         }
     }
 
+    const handlePublish = async() => {
+        if (id) {
+            await postRoadmapPublish(id);
+            setModifier("Public")
+        }
+    }
+
     return (
         <div style={{ maxHeight: '100vh', overflow: 'hidden' }}>
             <Flex style={{ padding: '20px' }} justify="space-between">
                 <Flex align="center">
                     <Button icon={<RollbackOutlined />} onClick={() => {navigate(`/`);}}>На главную</Button>
-                    <Typography.Title editable level={1} style={{ marginLeft: '100px', marginBottom: '5px' }}>
-                        Some roadmap name
-                    </Typography.Title>
                 </Flex>
                 <Flex align="center">
                     {(mode === 'view' && roadmapModifier === 'Private' && userRole === 'owner') ? <Button>Скопировать</Button> : <></>}
-                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button onClick={() => setModalOpen(true)}>Пригласить</Button>
+                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button style={{marginRight: '10px'}} onClick={() => setModalOpen(true)}>Пригласить</Button>
                         <AddUserModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} /></> : <></>}
+                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ?
+                        <Flex>
+                            <Tooltip title="после публикации роадмап будет недоступен для редактирования" color="red" key="red">
+                                <Button onClick={handlePublish}>Опубликовать</Button>
+                            </Tooltip>
+                        </Flex> : <></>}
                     <Select
                         value={currentInteractionMode}
                         onChange={handleModeChange}
