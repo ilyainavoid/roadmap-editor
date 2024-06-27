@@ -73,7 +73,7 @@ const DiagramPage: React.FC = () => {
                 </Flex>
                 <Flex align="center">
                     {(mode === 'view' && roadmapModifier === 'Private' && userRole === 'owner') ? <Button>Скопировать</Button> : <></>}
-                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button onClick={() => setModalOpen(true)}>Пригласить</Button>
+                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button onClick={() => setModalOpen(true)}>Доступ</Button>
                         <AddUserModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} /></> : <></>}
                     <Select
                         value={currentInteractionMode}

@@ -22,8 +22,11 @@ const UsersRoadmapsPage: React.FC = () => {
     const fetchUser = async (username: undefined | string) => {
         if (username) {
             let response = await getUsers(username);
-            if (response) {
-                setUser(response[0])
+            if (response && Array.isArray(response)) {
+                const user = response.find(user => user.username === username);
+                if (user) {
+                    setUser(user)
+                }
             } else {
                 console.log("error")
             }
