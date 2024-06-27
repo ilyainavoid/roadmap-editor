@@ -25,6 +25,7 @@ const RoadmapViewer: React.FC<RoadmapViewerProps> = ({ id }) => {
     const graphData = useSelector((state: RootState) => state.graph.graphData);
     const progressDetailed = useSelector((state: RootState) => state.progress.idStatusMap);
     const [status, setStatus] = useState<string>('Pending');
+    const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
     const applyNodeStyle = (node: any, status: string) => {
         switch (status) {
@@ -175,7 +176,7 @@ const RoadmapViewer: React.FC<RoadmapViewerProps> = ({ id }) => {
             <div className="app-content" ref={containerRef} />
             <Drawer title="Данные узла" width="600px" onClose={onClose} open={open}>
                 <Flex vertical>
-                    <Select style={{ marginBottom: '30px', width: '30%' }} onChange={handleStatusChange} options={statusOptions} value={status}></Select>
+                    <Select style={{ marginBottom: '30px', width: '30%' }} onChange={handleStatusChange} disabled={!isAuth} options={statusOptions} value={status}></Select>
                     <p>{cellData ? parse(cellData.data) : ''}</p>
                 </Flex>
             </Drawer>

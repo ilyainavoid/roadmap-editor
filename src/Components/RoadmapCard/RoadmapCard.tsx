@@ -56,7 +56,7 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({roadmap}) => {
     };
 
     const handleCardClick = () => {
-        //todo: redirect to roadmap
+        navigate(routes.roadmap('view', roadmap.id))
         console.log("Navigate to roadmap details");
     };
 

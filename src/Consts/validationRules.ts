@@ -23,7 +23,7 @@ class Validation {
     });
 
     static maxLengthValidation = (maxLength: number, errorMessage: string) => ({
-        min: maxLength,
+        max: maxLength,
         message: errorMessage
     });
 
@@ -52,13 +52,13 @@ export const validationRules = {
     passwordValidation: () => [
         Validation.requireRule(FILL_IN),
         Validation.minLengthValidation(6, MIN_6_LENGTH),
-        Validation.minLengthValidation(30, MAX_30_LENGTH),
+        Validation.maxLengthValidation(30, MAX_30_LENGTH),
 
     ],
 
     roadmapNameValidation: () => [
         Validation.requireRule(FILL_IN),
         Validation.minLengthValidation(6, MIN_6_LENGTH),
-        Validation.maxLengthValidation(6, MAX_30_LENGTH),
+        Validation.maxLengthValidation(30, MAX_30_LENGTH),
     ]
 }

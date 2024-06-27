@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import RoadmapViewer from "../../Components/RoadmapViewer/RoadmapViewer.tsx";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/rootReducer.ts";
-import AddUserModal from "../../Components/Modals/AddUserModal/AddUserModal.tsx";
+import AddUserModal from "../../Components/Modals/AddUserModal.tsx";
 
 const calculateProgress = (closed: number, total: number): number => {
     if (total === 0) {
@@ -73,7 +73,8 @@ const DiagramPage: React.FC = () => {
                 </Flex>
                 <Flex align="center">
                     {(mode === 'view' && roadmapModifier === 'Private' && userRole === 'owner') ? <Button>Скопировать</Button> : <></>}
-                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button onClick={() => setModalOpen(true)}>Пригласить</Button><AddUserModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} /></> : <></>}
+                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button onClick={() => setModalOpen(true)}>Пригласить</Button>
+                        <AddUserModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} /></> : <></>}
                     <Select
                         value={currentInteractionMode}
                         onChange={handleModeChange}

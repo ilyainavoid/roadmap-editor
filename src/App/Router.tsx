@@ -8,8 +8,6 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 import Layout from "./Layout.tsx";
 import DiagramPage from "../Pages/DiagramPage/DiagramPage.tsx";
 import DiagramProtectedRoute from "../Providers/DiagramProtectedRoute.tsx";
-import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
-import CreateDiagramPage from "../Pages/CreateDiagramPage/CreateDiagramPage.tsx";
 import PublicRoadmapPage from "../Pages/PublicRoadmapsPage/PublicRoadmapsPage.tsx";
 import StaredRoadmapsPage from "../Pages/StaredRoadmapsPage/StaredRoadmapsPage.tsx";
 import PrivateRoadmapsPage from "../Pages/PrivateRoadmapsPage/PrivateRoadmapsPage.tsx";
@@ -43,7 +41,6 @@ export const router = createBrowserRouter([
                     {
                         path: routes.myRoadmaps(),
                         element: <MyRoadmapsPage/>
-                        element: <ProfilePage />
                     }
                 ],
             },
@@ -60,18 +57,12 @@ export const router = createBrowserRouter([
                 element: <RegistrationPage />
             },
             {
-              path: routes.roadmaps(),
-              element: <PublicRoadmapPage/>
+                path: routes.roadmaps(),
+                element: <PublicRoadmapPage/>
             },
             {
                 path: routes.usersRoadmaps(),
                 element: <UsersRoadmapsPage/>
-            },
-            {
-                path: routes.creatediagram(),
-                element: <CreateDiagramPage/>
-                path: routes.error(),
-                element: <ErrorPage/>
             }
         ],
     },
