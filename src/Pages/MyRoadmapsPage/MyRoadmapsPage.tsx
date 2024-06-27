@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {Button, Flex, Pagination, Space, Typography} from 'antd';
+import {Button, Flex, FloatButton, Pagination, Space, Typography} from 'antd';
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 import {getMyRoadmaps} from "../../API/Roadmaps/getMyRoadmaps.ts";
 import {NO_ROADMAPS_YET} from "../../Consts/strings.ts";
@@ -81,6 +81,7 @@ const MyRoadmapsPage: React.FC = () => {
                     />
                 )}
             </Flex>
+            <FloatButton.BackTop />
             <CreateRoadmapModal isOpen={isOpen} onCancel={handleCancel} onSubmit={handleCreate}/>
         </>
     );

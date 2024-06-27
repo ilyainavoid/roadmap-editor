@@ -1,4 +1,4 @@
-import {Empty, Flex, Pagination, Typography} from "antd";
+import {Empty, Flex, FloatButton, Pagination, Typography} from "antd";
 import React, {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
@@ -50,6 +50,7 @@ const StaredRoadmapsPage: React.FC = () => {
                     />
                 )}
             </Flex>
+            <FloatButton.BackTop />
         </>
     );
 };

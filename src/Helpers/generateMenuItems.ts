@@ -2,30 +2,39 @@ import React from "react";
 
 interface MenuItem {
     key: string;
-    label: string;
+    label: string | JSX.Element;
     style?: React.CSSProperties;
-    isDropdown?: boolean
+    isDropdown?: boolean;
+    isSearch?: boolean;
+    isButton?: boolean;
 }
 
-export const generateMenuItems = (isAuth: boolean): MenuItem[] => {
-    let menuItems: MenuItem[] =
-        [
-            {key: 'main', label: 'Главная'},
-            {key: 'roadmaps', label: 'Роадмапы'}
-        ];
+interface MenuItems {
+    leftMenuItems: MenuItem[];
+    rightMenuItems: MenuItem[];
+}
+
+export const generateMenuItems = (isAuth: boolean): MenuItems => {
+    const leftMenuItems: MenuItem[] = [
+        {key: 'main', label: 'Главная'},
+        {key: 'roadmaps', label: 'Роадмапы'},
+    ];
+
+    const rightMenuItems: MenuItem[] = [];
 
     if (isAuth) {
-        menuItems.push(
-            {key: 'stared', label: 'Отмеченные'},
-            {key: 'private', label: 'Доступные'},
-            {key: 'profile', label: 'Профиль', style: {marginLeft: 'auto'}, isDropdown: true}
+        leftMenuItems.push({key: 'stared', label: 'Отмеченные'},
+            {key: 'private', label: 'Доступные'},)
+        rightMenuItems.push(
+            {key: 'create', label:"", style: {marginLeft: "auto"}, isButton:true},
+            {key: 'profile', label: "", isDropdown: true}
         );
     } else {
-        menuItems.push(
-            {key: 'registration', label: 'Регистрация', style: {marginLeft: 'auto'}},
+        rightMenuItems.push(
+            {key: 'registration', label: 'Регистрация', style: {marginLeft: "auto"}},
             {key: 'login', label: 'Вход'}
         );
     }
 
-    return menuItems;
+    return {leftMenuItems, rightMenuItems};
 };

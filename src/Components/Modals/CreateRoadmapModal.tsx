@@ -1,6 +1,7 @@
 import React from "react";
 import {Modal, Form, Input, Button} from "antd";
 import TextArea from "antd/es/input/TextArea";
+import {validationRules} from "../../Consts/validationRules.ts";
 
 interface ModalProps {
     isOpen: boolean;
@@ -39,14 +40,13 @@ const CreateRoadmapModal: React.FC<ModalProps> = ({isOpen, onCancel, onSubmit}) 
                 <Form.Item
                     label="Название"
                     name="name"
-                   //todo: add validation rules
+                    rules={validationRules.roadmapNameValidation()}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Описание"
                     name="description"
-                    //todo: add validation rules
                 >
                     <TextArea showCount maxLength={80} style={{ height: 120, resize: 'none' }}/>
                 </Form.Item>

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {Empty, Flex, Pagination, Typography} from 'antd';
+import {Empty, Flex, FloatButton, Pagination, Typography} from 'antd';
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 import {getPrivateRoadmaps} from "../../API/Roadmaps/getPrivateRoadmaps.ts";
 
@@ -52,6 +52,7 @@ const PrivateRoadmapsPage: React.FC = () => {
                     />
                 )}
             </Flex>
+            <FloatButton.BackTop />
         </>
     );
 };

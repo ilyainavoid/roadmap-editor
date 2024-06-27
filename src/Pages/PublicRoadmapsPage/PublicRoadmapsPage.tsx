@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {Space, Button, Flex, Input, Pagination, Typography, Empty} from 'antd';
+import {Space, Button, Flex, Input, Pagination, Typography, Empty, FloatButton} from 'antd';
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 import {SearchOutlined} from "@ant-design/icons";
 import {getRoadmaps} from "../../API/Roadmaps/getRoadmaps.ts";
@@ -75,6 +75,7 @@ const PublicRoadmapPage: React.FC = () => {
                     />
                 )}
             </Flex>
+            <FloatButton.BackTop />
         </>
     );
 };

@@ -1,4 +1,4 @@
-import {Button, Flex, Space, Typography} from "antd";
+import {Button, Flex, FloatButton, Space, Typography} from "antd";
 import React, {useEffect, useState} from "react";
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 import {useSelector} from "react-redux";
@@ -54,6 +54,7 @@ const MainPage: React.FC = () => {
                             </Space>
                         )}
                     </Space>
+                    <FloatButton.BackTop />
                 </div>
             )}
         </>

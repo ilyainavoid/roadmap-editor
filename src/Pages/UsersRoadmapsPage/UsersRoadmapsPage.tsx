@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams, useSearchParams} from "react-router-dom";
-import {Card, Pagination, Typography, Avatar, Space, Row, Col, Empty} from "antd";
+import {Card, Pagination, Typography, Avatar, Space, Row, Col, Empty, FloatButton} from "antd";
 import ListOfRoadmaps from "../../Components/ListOfRadmaps/ListOfRoadmaps.tsx";
 import {UserOutlined} from "@ant-design/icons";
 import styles from '../UsersRoadmapsPage/usersRoadmap.module.css'
@@ -48,9 +48,9 @@ const UsersRoadmapsPage: React.FC = () => {
 
     useEffect(() => {
         fetchUser(username)
-        setCurrentPage(page);
         fetchRoadmaps(user?.id, page)
-    }, [page, user]);
+        setCurrentPage(page);
+    }, [page, user, username]);
 
     const handlePageChange = (page: number) => {
         setSearchParams({page: page.toString()});
@@ -88,6 +88,7 @@ const UsersRoadmapsPage: React.FC = () => {
                     )}
                 </Space>
             </Col>
+            <FloatButton.BackTop />
         </Row>
     );
 };

@@ -62,7 +62,11 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({roadmap}) => {
 
     const handleAuthorClick = (event: React.MouseEvent) => {
         event.stopPropagation();
-        navigate(routes.usersRoadmaps(roadmap.user.username));
+        if (roadmap.user.id !== profile?.id) {
+            navigate(routes.usersRoadmaps(roadmap.user.username))
+        }
+        else navigate(routes.myRoadmaps())
+
     };
 
     const handleCopyClick = async (event: React.MouseEvent) => {
@@ -106,10 +110,9 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({roadmap}) => {
 
     const handleDeleteOnSubmit = async () => {
         let response = await deleteRoadmap(roadmap.id);
-        if(response?.status === 200) {
+        if (response?.status === 200) {
             setIsDeleteOpen(false);
-        }
-        else console.log("error");
+        } else console.log("error");
     }
 
     const items: MenuProps['items'] = [
@@ -188,7 +191,8 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({roadmap}) => {
             </Card>
             <EditRoadmapModal isOpen={isEditOpen} onCancel={handleEditCancelClick} onSubmit={handleEditSubmit}
                               name={roadmap.name} description={roadmap.description}/>
-            <DeleteRoadmapModal isOpen={isDeleteOpen} onCancel={handleDeleteCancelClick} onSubmit={handleDeleteOnSubmit} name={name}/>
+            <DeleteRoadmapModal isOpen={isDeleteOpen} onCancel={handleDeleteCancelClick} onSubmit={handleDeleteOnSubmit}
+                                name={name}/>
         </>
     );
 };
