@@ -10,6 +10,8 @@ import AddUserModal from "../../Components/Modals/AddUserModal.tsx";
 import {postRoadmapPublish} from "../../API/RoadmapAccess/postRoadmapPublish.ts";
 import {setModifier} from "../../Redux/actions/graphAction.ts";
 import {getSpecifiedRoadmap} from "../../API/Roadmaps/getSpecifiedRoadmap.ts";
+import {routes} from "../../Consts/routes.ts";
+import {Graph} from "@antv/x6";
 
 const calculateProgress = (closed: number, total: number): number => {
     if (total === 0) {
@@ -40,6 +42,7 @@ const DiagramPage: React.FC = () => {
         if (roadmapModifier) {
             setModifier(roadmapModifier);
         }
+        setCurrentInteractionMode('view')
     }, [roadmapModifier])
 
     useEffect(() => {
@@ -82,8 +85,10 @@ const DiagramPage: React.FC = () => {
         if (id) {
             await postRoadmapPublish(id);
             setModifier("Public")
+            navigate(routes.roadmap('view', id));
         }
     }
+
 
     return (
         <div style={{ maxHeight: '100vh', overflow: 'hidden' }}>

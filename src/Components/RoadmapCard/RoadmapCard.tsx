@@ -112,6 +112,8 @@ const RoadmapCard: React.FC<RoadmapCardProps> = ({roadmap}) => {
         let response = await deleteRoadmap(roadmap.id);
         if (response?.status === 200) {
             setIsDeleteOpen(false);
+            location.reload();
+
         } else console.log("error");
     }
 

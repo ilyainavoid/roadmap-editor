@@ -14,7 +14,7 @@ const processRoadmapData = async (mode: string, id: string, userProfile: UserPro
 
     try {
         const roadmapResponse = await getSpecifiedRoadmap(id);
-        sessionStorage.setItem("roadmap", roadmapResponse);
+        sessionStorage.setItem("graphData", '')
         store.dispatch(setGraphData(roadmapResponse.content))
         store.dispatch(setProgress({
             topicsClosed: roadmapResponse.topicsClosed,
