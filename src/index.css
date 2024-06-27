@@ -53,3 +53,29 @@ body {
 .unstar:hover{
     color: gold;
 }
+
+.search-container{
+    width: 50%;
+    margin-bottom: 30px;
+}
+
+.pagination-container {
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.container-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.container-row {
+    display: flex;
+    gap: 8px;
+}
+
+.avatar {
+    background-color: rgb(180, 191, 143);
+}

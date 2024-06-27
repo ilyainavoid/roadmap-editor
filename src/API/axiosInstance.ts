@@ -26,7 +26,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = getAccessToken();
-        if (token) {
+        if (token && token !== "undefined") {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;
@@ -57,18 +57,18 @@ axiosInstance.interceptors.response.use(
             isRefreshing = true;
 
             const refreshToken = getRefreshToken();
-            if (!refreshToken) {
+            if (!refreshToken || refreshToken === "undefined") {
                 return Promise.reject(error);
             }
 
             try {
                 const accessToken = getAccessToken();
-                const { data } = await axios.post('api/user/refresh', {
+                const { data } = await axios.post('/api/user/refresh', {
                     "AccessToken": accessToken,
                     "RefreshToken": refreshToken
                 });
-
-                setTokens(data.AccessToken, data.RefreshToken);
+                console.log(data)
+                setTokens(data.accessToken, data.refreshToken);
                 axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${data.AccessToken}`;
                 originalRequest.headers['Authorization'] = `Bearer ${data.AccessToken}`;
                 processQueue(null, data.AccessToken);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
-import DebounceSelect from "../../DebounceSelect/DebounceSelect.tsx";
-import { getUsers } from "../../../API/Users/getUsers.ts";
+import DebounceSelect from "../DebounceSelect/DebounceSelect.tsx";
+import { getUsers } from "../../API/Users/getUsers.ts";
 
 interface UserValue {
     id: string;

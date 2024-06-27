@@ -9,6 +9,12 @@ import Layout from "./Layout.tsx";
 import DiagramPage from "../Pages/DiagramPage/DiagramPage.tsx";
 import DiagramProtectedRoute from "../Providers/DiagramProtectedRoute.tsx";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
+import CreateDiagramPage from "../Pages/CreateDiagramPage/CreateDiagramPage.tsx";
+import PublicRoadmapPage from "../Pages/PublicRoadmapsPage/PublicRoadmapsPage.tsx";
+import StaredRoadmapsPage from "../Pages/StaredRoadmapsPage/StaredRoadmapsPage.tsx";
+import PrivateRoadmapsPage from "../Pages/PrivateRoadmapsPage/PrivateRoadmapsPage.tsx";
+import MyRoadmapsPage from "../Pages/MyRoadmapsPage/MyRoadmapsPage.tsx";
+import UsersRoadmapsPage from "../Pages/UsersRoadmapsPage/UsersRoadmapsPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -24,6 +30,19 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         path: routes.profile(),
+                        element: <ProfilePage/>
+                    },
+                    {
+                        path: routes.stared(),
+                        element: <StaredRoadmapsPage/>
+                    },
+                    {
+                        path: routes.private(),
+                        element: <PrivateRoadmapsPage/>
+                    },
+                    {
+                        path: routes.myRoadmaps(),
+                        element: <MyRoadmapsPage/>
                         element: <ProfilePage />
                     }
                 ],
@@ -41,6 +60,16 @@ export const router = createBrowserRouter([
                 element: <RegistrationPage />
             },
             {
+              path: routes.roadmaps(),
+              element: <PublicRoadmapPage/>
+            },
+            {
+                path: routes.usersRoadmaps(),
+                element: <UsersRoadmapsPage/>
+            },
+            {
+                path: routes.creatediagram(),
+                element: <CreateDiagramPage/>
                 path: routes.error(),
                 element: <ErrorPage/>
             }

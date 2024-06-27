@@ -4,5 +4,12 @@ export const routes = {
     registration: () => '/registration',
     profile: () => '/profile',
     roadmap: () => '/roadmap/:mode/:id',
-    error: () => '/error'
-}
+    error: () => '/error',
+    creatediagram: () => '/create',
+    edit: () => '/edit',
+    roadmaps: () => '/roadmaps',
+    myRoadmaps: () => '/roadmaps/my',
+    stared: () => '/roadmaps/stared',
+    private: () => '/roadmaps/private',
+    usersRoadmaps: (username: string) => `/users/${username || ':username'}/roadmaps`
+};

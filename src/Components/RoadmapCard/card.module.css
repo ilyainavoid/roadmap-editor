@@ -1,16 +1,51 @@
 .roadmapCard {
     background-color: rgb(237, 244, 242);
     border-color: #4f7e5c;
-    min-height: 162px;
+    min-height: 182px;
     max-height: 200px;
 }
 
 .user {
-
     transition: color 0.3s ease-in-out;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: block;
+    max-width: 200px;
 }
-
 
 .user:hover {
     color: #01b009;
+}
+
+.userContainer {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (max-width: 350px) {
+    .user {
+        max-width: 50px;
+    }
+}
+
+@media (min-width: 351px) and (max-width: 767px) {
+    .user {
+        max-width: 100px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .user {
+        max-width: 150px;
+    }
+}
+
+@media (min-width: 992px) {
+    .user {
+        max-width: 200px;
+    }
 }
