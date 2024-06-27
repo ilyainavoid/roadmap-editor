@@ -16,8 +16,20 @@ import { createThemeNode, createTopicNode } from '../../Consts/nodes.ts';
 import Toolbar from '../../Consts/toolbar.ts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../Redux/rootReducer.ts';
+import store from "../../Redux/store.ts";
+import { setGraphData } from "../../Redux/actions/graphAction.ts";
+import { putRoadmapContent } from "../../API/Roadmaps/putRoadmapContent.ts";
 
-const DiagramEditor: React.FC = () => {
+interface NodeData {
+    label: string;
+    data: string;
+}
+
+interface DiagramEditorProps {
+    id: string | undefined;
+}
+
+const DiagramEditor: React.FC<DiagramEditorProps> = ({ id }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const stencilContainerRef = useRef<HTMLDivElement>(null);
     const graphRef = useRef<Graph | null>(null);
@@ -25,42 +37,45 @@ const DiagramEditor: React.FC = () => {
     const graphData = useSelector((state: RootState) => state.graph.graphData);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [nodeData, setNodeData] = useState<{ id: string; label: string; data: string }>({
-        id: '',
-        label: '',
-        data: '',
-    });
+    const [nodeData, setNodeData] = useState<Map<string, NodeData>>(new Map());
+    const [currentNodeId, setCurrentNodeId] = useState<string | null>(null);
     const [dataPreview, setDataPreview] = useState('');
 
     const showModal = (node: any) => {
-        const nodeData = {
-            id: node.id,
-            label: node.attr('label/text'),
-            data: node.getData()?.data || '',
-        }
-        setNodeData(nodeData);
-        setDataPreview(nodeData.data);
+        const id = node.id;
+        const label = node.attr('label/text');
+        const data = node.getData()?.data || '';
+        setNodeData(new Map(nodeData.set(id, { label, data })));
+        setDataPreview(data);
+        setCurrentNodeId(id);
         setIsModalVisible(true);
     };
+
     const handleOk = () => {
-        const { id, label, data } = nodeData;
-        const node = graphRef.current?.getCellById(id);
-        if (node) {
-            node.attr('label/text', label);
-            node.setData({ data: data });
+        if (currentNodeId) {
+            const { label, data } = nodeData.get(currentNodeId) || { label: '', data: '' };
+            const node = graphRef.current?.getCellById(currentNodeId);
+            if (node) {
+                node.attr('label/text', label);
+                node.setData({ data });
+            }
         }
         setIsModalVisible(false);
-        setNodeData({ id: '', label: '', data: '' });
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
-        setNodeData({ id: '', label: '', data: '' });
     };
 
     const handleQuillChange = (value: string) => {
-        setNodeData({ ...nodeData, data: value });
-        setDataPreview(value);
+        if (currentNodeId) {
+            const node = nodeData.get(currentNodeId);
+            if (node) {
+                node.data = value;
+                setNodeData(new Map(nodeData.set(currentNodeId, node)));
+                setDataPreview(value);
+            }
+        }
     };
 
     useEffect(() => {
@@ -84,8 +99,11 @@ const DiagramEditor: React.FC = () => {
             mousewheel: true,
         });
 
-        if (graphData && graphData.cells) {
-            graph.fromJSON(graphData.cells)
+        const storedData = sessionStorage.getItem('graphData');
+        if (storedData) {
+            graph.fromJSON(JSON.parse(storedData));
+        } else if (graphData && graphData.cells) {
+            graph.fromJSON(graphData.cells);
         }
 
         graph.use(new Snapline({ enabled: true, sharp: true }));
@@ -183,50 +201,55 @@ const DiagramEditor: React.FC = () => {
         stencil.load([theme], 'Theme');
         stencil.load([topic], 'Topic');
 
-        graph.on('node:dblclick', ({ node }) => {
-            showModal(node);
-        });
-
-        graph.on('history:change', () => {
+        const historyChangeHandler = () => {
+            console.log('History change event');
             saveGraphState();
-        });
+        };
 
-        graph.on('node:removed', ({ node }) => {
+        const nodeDblClickHandler = ({ node }: any) => {
+            showModal(node);
+        };
+
+        const nodeRemoveHandler = ({ node }: any) => {
             const edges = graph.getConnectedEdges(node);
             edges.forEach((edge) => {
                 edge.remove();
             });
-        });
+        };
+
+        graph.on('history:change', historyChangeHandler);
+        graph.on('node:dblclick', nodeDblClickHandler);
+        graph.on('node:removed', nodeRemoveHandler);
 
         const saveGraphState = () => {
             const graphData = graph.toJSON();
-            localStorage.setItem('graphData', JSON.stringify(graphData));
-        };
-
-        const loadGraphState = () => {
-            const graphData = localStorage.getItem('graphData');
-            if (graphData) {
-                graph.fromJSON(JSON.parse(graphData));
-            }
-        };
-
-        loadGraphState();
+            sessionStorage.setItem('graphData', JSON.stringify(graphData));
+            store.dispatch(setGraphData(graphData));
+        }
 
         return () => {
+            graph.off('history:change', historyChangeHandler);
+            graph.off('node:dblclick', nodeDblClickHandler);
+            graph.off('node:removed', nodeRemoveHandler);
+            saveGraphState();
             graph.dispose();
         };
     }, []);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const graphData = localStorage.getItem('graphData');
-            if (graphData) {
-                console.log('Sending data to server:', JSON.parse(graphData));
+        const interval = setInterval(async () => {
+            const storedData = sessionStorage.getItem('graphData');
+            if (storedData) {
+                try {
+                    await putRoadmapContent(id, storedData);
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }, 15000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [id]);
 
     return (
         <div>
@@ -240,34 +263,41 @@ const DiagramEditor: React.FC = () => {
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-                <Input
-                    style={{ marginBottom: '10px' }}
-                    value={nodeData.label}
-                    onChange={(e) =>
-                        setNodeData({ ...nodeData, label: e.target.value })
-                    }
-                    placeholder="Enter node label"
-                />
-                <ReactQuill
-                    value={nodeData.data}
-                    onChange={handleQuillChange}
-                    modules={{ toolbar: Toolbar }}
-                />
-                <div
-                    style={{
-                        marginTop: '10px',
-                        borderTop: '1px solid #f0f0f0',
-                        paddingTop: '10px',
-                    }}
-                >
-                    <Typography.Text strong>Preview:</Typography.Text>
-                    <div
-                        style={{
-                            marginLeft: '20px',
-                        }}
-                        dangerouslySetInnerHTML={{ __html: dataPreview }}
-                    />
-                </div>
+                {currentNodeId && (
+                    <>
+                        <Input
+                            style={{ marginBottom: '10px' }}
+                            value={nodeData.get(currentNodeId)?.label}
+                            onChange={(e) =>
+                                setNodeData(new Map(nodeData.set(currentNodeId, {
+                                    ...nodeData.get(currentNodeId),
+                                    label: e.target.value,
+                                })))
+                            }
+                            placeholder="Enter node label"
+                        />
+                        <ReactQuill
+                            value={nodeData.get(currentNodeId)?.data || ''}
+                            onChange={handleQuillChange}
+                            modules={{ toolbar: Toolbar }}
+                        />
+                        <div
+                            style={{
+                                marginTop: '10px',
+                                borderTop: '1px solid #f0f0f0',
+                                paddingTop: '10px',
+                            }}
+                        >
+                            <Typography.Text strong>Preview:</Typography.Text>
+                            <div
+                                style={{
+                                    marginLeft: '20px',
+                                }}
+                                dangerouslySetInnerHTML={{ __html: dataPreview }}
+                            />
+                        </div>
+                    </>
+                )}
             </Modal>
         </div>
     );

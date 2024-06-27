@@ -39,14 +39,14 @@ const DropdownProfile: React.FC<DropdownProfileProps> = ({username}) => {
             key: '2',
             label: "Мои роадмапы",
             onClick: () => {
-                navigate(routes.profile());
+                navigate(routes.myRoadmaps());
             },
         },
         {
             key: '3',
             danger: true,
             label: 'Выйти',
-            onClick: logout,
+            onClick: ()=> logout(),
         },
     ];
 
@@ -54,8 +54,8 @@ const DropdownProfile: React.FC<DropdownProfileProps> = ({username}) => {
         <Dropdown menu={{items}}>
             <a onClick={(e) => e.preventDefault()}>
                 <Space>
-                    {username}
                     <DownOutlined/>
+                    {username}
                 </Space>
             </a>
         </Dropdown>

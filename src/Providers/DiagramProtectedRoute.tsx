@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {useParams } from 'react-router-dom';
-import checkAccess from "../Helpers/checkAccess.ts";
+import processRoadmapData from "../Helpers/processRoadmapData.ts";
 import NotAuthorizedPage from "../Pages/NotAuthPage/NotAuthPage.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../Redux/rootReducer.ts";
@@ -13,7 +13,7 @@ const DiagramProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
     useEffect(() => {
         const checkUserAccess = async () => {
             if (mode && id) {
-                const access = await checkAccess(mode, id, userProfile);
+                const access = await processRoadmapData(mode, id, userProfile);
                 setHasAccess(access);
             } else {
                 setHasAccess(false);

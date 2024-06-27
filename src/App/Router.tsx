@@ -8,13 +8,16 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage.tsx";
 import Layout from "./Layout.tsx";
 import DiagramPage from "../Pages/DiagramPage/DiagramPage.tsx";
 import DiagramProtectedRoute from "../Providers/DiagramProtectedRoute.tsx";
-import ErrorPage from "../Pages/ErrorPage/ErrorPage.tsx";
-import LayoutWithoutHeader from "./LayoutWithoutHeader.tsx";
+import PublicRoadmapPage from "../Pages/PublicRoadmapsPage/PublicRoadmapsPage.tsx";
+import StaredRoadmapsPage from "../Pages/StaredRoadmapsPage/StaredRoadmapsPage.tsx";
+import PrivateRoadmapsPage from "../Pages/PrivateRoadmapsPage/PrivateRoadmapsPage.tsx";
+import MyRoadmapsPage from "../Pages/MyRoadmapsPage/MyRoadmapsPage.tsx";
+import UsersRoadmapsPage from "../Pages/UsersRoadmapsPage/UsersRoadmapsPage.tsx";
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout />,
+        element: <Layout isHeaderVisible={true}/>,
         children: [
             {
                 element: (
@@ -25,7 +28,19 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         path: routes.profile(),
-                        element: <ProfilePage />
+                        element: <ProfilePage/>
+                    },
+                    {
+                        path: routes.stared(),
+                        element: <StaredRoadmapsPage/>
+                    },
+                    {
+                        path: routes.private(),
+                        element: <PrivateRoadmapsPage/>
+                    },
+                    {
+                        path: routes.myRoadmaps(),
+                        element: <MyRoadmapsPage/>
                     }
                 ],
             },
@@ -42,14 +57,18 @@ export const router = createBrowserRouter([
                 element: <RegistrationPage />
             },
             {
-                path: routes.error(),
-                element: <ErrorPage/>
+                path: routes.roadmaps(),
+                element: <PublicRoadmapPage/>
+            },
+            {
+                path: routes.usersRoadmaps(),
+                element: <UsersRoadmapsPage/>
             }
         ],
     },
     {
         path: '/',
-        element: <LayoutWithoutHeader />,
+        element: <Layout isHeaderVisible={false}/>,
         children: [
             {
                 element: (
@@ -63,7 +82,7 @@ export const router = createBrowserRouter([
                         element: <DiagramPage/>
                     }
                 ]
-            }
-        ],
-    },
+            },
+        ]
+    }
 ]);

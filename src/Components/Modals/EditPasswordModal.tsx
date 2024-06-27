@@ -1,5 +1,5 @@
 import React from "react";
-import {Modal, Form, Input} from "antd";
+import {Modal, Form, Input, Button} from "antd";
 import {validationRules} from "../../Consts/validationRules.ts";
 
 interface EditPasswordModalProps {
@@ -8,7 +8,7 @@ interface EditPasswordModalProps {
     onSubmit: (values: PasswordChanges) => void;
 }
 
-const EditPasswordModal: React.FC<EditPasswordModalProps> = ({isOpen, onCancel, onSubmit,}) => {
+const EditPasswordModal: React.FC<EditPasswordModalProps> = ({isOpen, onCancel, onSubmit}) => {
     const [form] = Form.useForm();
 
     const handleOk = async () => {
@@ -21,6 +21,11 @@ const EditPasswordModal: React.FC<EditPasswordModalProps> = ({isOpen, onCancel, 
         }
     };
 
+    const footer = [
+        <Button key="back" onClick={onCancel}>Отменить</Button>,
+        <Button type="primary" key="submit" onClick={handleOk}>Сохранить</Button>
+    ];
+
     return (
         <Modal
             title="Редактировать пароль"
@@ -28,6 +33,7 @@ const EditPasswordModal: React.FC<EditPasswordModalProps> = ({isOpen, onCancel, 
             onCancel={onCancel}
             onOk={handleOk}
             destroyOnClose
+            footer={footer}
         >
             <Form form={form} layout="vertical">
                 <Form.Item

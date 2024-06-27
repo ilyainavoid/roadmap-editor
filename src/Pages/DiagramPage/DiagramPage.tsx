@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from "react";
 import DiagramEditor from "../../Components/DiagramEditor/DiagramEditor.tsx";
-import { Button, Flex, Select, Typography } from "antd";
-import { CopyOutlined, RollbackOutlined } from "@ant-design/icons";
+import {Button, Flex, Progress, Select, Typography} from "antd";
+import { RollbackOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import RoadmapViewer from "../../Components/RoadmapViewer/RoadmapViewer.tsx";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/rootReducer.ts";
+import AddUserModal from "../../Components/Modals/AddUserModal.tsx";
+
+const calculateProgress = (closed: number, total: number): number => {
+    if (total === 0) {
+        return 0;
+    }
+    const progress = (closed / total) * 100;
+    return parseInt(progress.toFixed(0), 10);
+};
 
 const DiagramPage: React.FC = () => {
     const { mode, id } = useParams<{ mode: string, id: string }>();
     const [currentInteractionMode, setCurrentInteractionMode] = useState<string>('');
     const userRole = useSelector((state: RootState) => state.user.role);
+    const roadmapModifier = useSelector((state: RootState) => state.graph.modifier);
     const navigate = useNavigate();
+    const progressData = useSelector((state: RootState) => state.progress.progressData);
+    const [percentage, setPercentage] = useState<number>(calculateProgress(progressData.topicsClosed, progressData.topicsCount))
+    const [isModalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         if (mode) {
@@ -19,9 +32,13 @@ const DiagramPage: React.FC = () => {
         }
     }, [mode]);
 
+    useEffect(() => {
+        setPercentage(calculateProgress(progressData.topicsClosed, progressData.topicsCount));
+    }, [progressData]);
+
     const handleModeChange = (value: string) => {
         setCurrentInteractionMode(value);
-        navigate(`/roadmap/${value}`);
+        navigate(`/roadmap/${value}/${id}`);
     };
 
     interface Option {
@@ -55,7 +72,9 @@ const DiagramPage: React.FC = () => {
                     </Typography.Title>
                 </Flex>
                 <Flex align="center">
-                    <Button icon={<CopyOutlined />}>Клонировать диаграмму</Button>
+                    {(mode === 'view' && roadmapModifier === 'Private' && userRole === 'owner') ? <Button>Скопировать</Button> : <></>}
+                    {(mode === 'edit' && roadmapModifier === 'Private' && userRole === 'owner') ? <><Button onClick={() => setModalOpen(true)}>Пригласить</Button>
+                        <AddUserModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} /></> : <></>}
                     <Select
                         value={currentInteractionMode}
                         onChange={handleModeChange}
@@ -64,8 +83,11 @@ const DiagramPage: React.FC = () => {
                     />
                 </Flex>
             </Flex>
+            <Flex align="center" justify="space-around" style={{paddingBottom: '20px'}}>
+                {mode === 'view' ?  <Progress style={{width: '95vw'}} percent={percentage} /> : <></>}
+            </Flex>
             <div style={{ flex: 1, overflow: 'auto' }}>
-                {mode === 'view' ? <RoadmapViewer /> : <DiagramEditor />}
+                {mode === 'view' ? <RoadmapViewer id = {id} /> : <DiagramEditor id = {id} />}
             </div>
         </div>
     );

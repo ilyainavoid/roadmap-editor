@@ -1,4 +1,4 @@
-interface LoginValues{
+interface LoginValues {
     username: string,
     password: string
 }
@@ -14,7 +14,7 @@ interface TokenResponse {
     refreshToken: string;
 }
 
-interface UserProfile{
+interface UserProfile {
     id: string;
     email: string;
     username: string;
@@ -28,4 +28,21 @@ interface EditProfile {
 interface PasswordChanges {
     oldPassword: string;
     newPassword: string;
+}
+
+interface RoadmapPaged {
+    id: string;
+    name: string;
+    description: string;
+    user: UserProfile;
+    status: string;
+    starsCount: number;
+    topicCount: number;
+    topicsClosed: number;
+    isStared: boolean;
+}
+
+interface RoadmapCreate{
+    name: string;
+    description: string;
 }

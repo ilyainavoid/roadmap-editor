@@ -1,5 +1,5 @@
-import {FILL_IN, INVALID_EMAIL_INPUT, MIN_1_DIGIT, MIN_6_LENGTH} from "./strings.ts";
-import {MIN_1_DIGIT_REGEX, EMAIL} from "./regExps.ts";
+import {FILL_IN, INVALID_EMAIL_INPUT, MAX_30_LENGTH, MIN_6_LENGTH} from "./strings.ts";
+import { EMAIL} from "./regExps.ts";
 
 class Validation {
     static requireRule = (errorMessage: string) => ({
@@ -17,8 +17,13 @@ class Validation {
         message: errorMessage
     });
 
-    static lengthValidation = (minLength: number, errorMessage: string) => ({
+    static minLengthValidation = (minLength: number, errorMessage: string) => ({
         min: minLength,
+        message: errorMessage
+    });
+
+    static maxLengthValidation = (maxLength: number, errorMessage: string) => ({
+        max: maxLength,
         message: errorMessage
     });
 
@@ -36,6 +41,7 @@ export const validationRules = {
 
     usernameValidation: () => [
         Validation.requireRule(FILL_IN),
+        Validation.minLengthValidation(6, MIN_6_LENGTH),
     ],
 
     emailValidation: () => [
@@ -45,7 +51,14 @@ export const validationRules = {
 
     passwordValidation: () => [
         Validation.requireRule(FILL_IN),
-        Validation.inputValidation(MIN_1_DIGIT_REGEX, MIN_1_DIGIT),
-        Validation.lengthValidation(6, MIN_6_LENGTH)
+        Validation.minLengthValidation(6, MIN_6_LENGTH),
+        Validation.maxLengthValidation(30, MAX_30_LENGTH),
+
     ],
+
+    roadmapNameValidation: () => [
+        Validation.requireRule(FILL_IN),
+        Validation.minLengthValidation(6, MIN_6_LENGTH),
+        Validation.maxLengthValidation(30, MAX_30_LENGTH),
+    ]
 }
